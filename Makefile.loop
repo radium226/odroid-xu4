@@ -1,0 +1,22 @@
+FILE_NAME = sd-card.img
+FILE_SIZE = 4G
+PARTITION_LABEL = ROOT
+
+./$(FILE_NAME):
+	dd of="./$(FILE_NAME)" bs=1 seek="$(FILE_SIZE)" count=0
+	mkfs.ext4 -F "$(FILE_NAME)" -L "$(PARTITION_LABEL)"
+
+.PHONY: prepare
+prepare: ./$(FILE_NAME)
+
+.PHONY: clean
+clean:
+	test -f "./${FILE_NAME}" && rm "./${FILE_NAME}" || true
+
+.PHONY: mount
+mount:
+	sudo mount -o "suid" "./$(FILE_NAME)" "./$(ROOTFS_FOLDER_NAME)"
+
+.PHONY: fuse
+fuse:
+	true

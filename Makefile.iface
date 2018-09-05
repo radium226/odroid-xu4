@@ -1,0 +1,18 @@
+# https://memo-linux.com/ip-la-commande-linux-pour-gerer-son-interface-reseau/
+
+IFACE_NAME = ens9
+
+NETWORK_PREFIX = 192.168.56
+NETWORK_MASK_BITS = 24
+
+HOST_IP = $(NETWORK_PREFIX).1
+
+.PHONY: create
+create:
+	sudo ip addr add "$(NETWORK_PREFIX).1/$(NETWORK_MASK_BITS)" dev "$(IFACE_NAME)"
+	sudo ip link set "$(IFACE_NAME)" up
+
+.PHONY: destroy
+destroy:
+	sudo ip link set "$(IFACE_NAME)" down
+	sudo ip addr del "$(NETWORK_PREFIX).1/$(NETWORK_MASK_BITS)" dev "$(IFACE_NAME)"

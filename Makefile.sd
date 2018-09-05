@@ -1,0 +1,21 @@
+BLOCK_PATH = /dev/sdb
+PARTITION_LABEL = ROOT
+
+.PHONY: prepare
+prepare:
+	#sudo dd if="/dev/zero" of="$(BLOCK_PATH)" bs="1M" count="8"
+	echo "4096,,,,,;" | sudo sfdisk "$(BLOCK_PATH)"
+	sudo mkfs.ext4 -F "$(BLOCK_PATH)1" -L "$(PARTITION_LABEL)"
+
+.PHONY: mount
+mount:
+	sudo mount -o "suid" "$(BLOCK_PATH)1" "./$(ROOTFS_FOLDER_NAME)"
+
+.PHONY: fuse
+fuse:
+	cd "./$(ROOTFS_FOLDER_NAME)/boot" && \
+	sudo sh "./sd_fusing.sh" "$(BLOCK_PATH)"
+
+.PHONY: clean
+clean:
+	sudo sfdisk --delete "$(BLOCK_PATH)"
