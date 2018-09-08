@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -euo pipefail
+
+apply_module()
+{
+  pacman \
+    --sync "sudo" \
+    --noconfirm \
+    --needed
+  cat <<EOCAT >"/etc/sudoers.d/wheel"
+Defaults:%wheel !requiretty
+Defaults:%wheel env_keep += "PATH"
+%wheel ALL=(ALL) NOPASSWD:ALL
+EOCAT
+}

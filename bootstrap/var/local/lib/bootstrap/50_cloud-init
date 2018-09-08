@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -euo pipefail
+
+export AUR_USER="aur"
+export AUR_SNAPSHOT_URL="https://aur.archlinux.org/cgit/aur.git/snapshot/cloud-init.tar.gz"
+export PACKAGE_NAME="$( basename "${AUR_SNAPSHOT_URL}" ".tar.gz" )"
+
+apply_module()
+{
+  if ! is_package_installed "${PACKAGE_NAME}"; then
+    sudo -u "${AUR_USER}" mkdir -p "/tmp/${PACKAGE_NAME}"
+    cd "/tmp/${PACKAGE_NAME}"
+      sudo -u "${AUR_USER}" -- sh -c \
+        "wget '${AUR_SNAPSHOT_URL}' -O './${PACKAGE_NAME}.tar.gz' && \
+         tar -xvf './${PACKAGE_NAME}.tar.gz' --strip 1 && \
+         makepkg --syncdeps --install --noconfirm"
+    cd -
+  fi
+}

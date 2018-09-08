@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -euo pipefail
+
+apply_module()
+{
+  pacman \
+    --sync \
+    "openssh" \
+    --noconfirm \
+    --needed
+
+  sed -ie 's,#\?PermitRootLogin .*$,PermitRootLogin yes,g' "/etc/ssh/sshd_config"
+
+  systemctl start "sshd.service"
+}

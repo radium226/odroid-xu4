@@ -1,0 +1,21 @@
+#!/bin/bash
+
+set -euo pipefail
+
+export ANSIBLE_USER="ansible"
+
+apply_module()
+{
+  pacman \
+    --sync \
+    "ansible" \
+    --noconfirm \
+    --needed
+
+  useradd \
+    --system \
+    --shell "/usr/bin/nologin" \
+    --groups "wheel" \
+    "${ANSIBLE_USER}"
+
+}

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -euo pipefail
+
+is_package_installed()
+{
+  declare package_name="${1}"
+  pacman -Q | cut -d" " -f1 | grep -qE "^${package_name}$"
+}
+
+main()
+{
+  declare module_file_path=
+  find "/var/local/lib/bootstrap" -type "f" | sort -n | while read module_file_path; do
+    echo " --> Applying $( basename "${module_file_path}" | cut -d"_" -f2 )"
+    (
+      source "${module_file_path}"
+      apply_module
+    )
+  done
+}
+
+main "${@}"

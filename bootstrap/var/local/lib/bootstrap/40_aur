@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -euo pipefail
+
+export AUR_USER="aur"
+
+apply_module()
+{
+  useradd \
+    --system \
+    --shell "/usr/bin/nologin" \
+    --groups "wheel" \
+    "${AUR_USER}"
+
+  pacman \
+    --sync \
+    "base-devel" "git" "wget" \
+    --noconfirm \
+    --needed
+}

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -euo pipefail
+
+apply_module()
+{
+  pacman-key --init
+  pacman-key --populate "archlinuxarm"
+  #pacman -Syu --noconfirm
+}
