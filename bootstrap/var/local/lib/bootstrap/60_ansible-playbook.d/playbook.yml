@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  tasks:
+  - name: install packages
+    debug:
+      msg: "{{ item }}"
+    loop:
+    - "knockd"
+    - "iptables"
+    become: yes

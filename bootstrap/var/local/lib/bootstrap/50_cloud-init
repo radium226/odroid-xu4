@@ -2,6 +2,8 @@
 
 set -euo pipefail
 
+export DISABLED=1
+
 export AUR_USER="aur"
 export AUR_SNAPSHOT_URL="https://aur.archlinux.org/cgit/aur.git/snapshot/cloud-init.tar.gz"
 export PACKAGE_NAME="$( basename "${AUR_SNAPSHOT_URL}" ".tar.gz" )"
@@ -17,4 +19,12 @@ apply_module()
          makepkg --syncdeps --install --noconfirm"
     cd -
   fi
+
+  cat <<EOCAT >"/etc/cloud/cloud.cfg.d/30_ansible.cfg"
+#cloud-config
+runcmd:
+ - [ touch, "/touched" ]
+EOCAT
+
+  systemctl enable "cloud-init.service"
 }

@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-export ANSIBLE_USER="ansible"
+export ANSIBLE_USER_NAME="ansible"
 
 apply_module()
 {
@@ -12,10 +12,14 @@ apply_module()
     --noconfirm \
     --needed
 
-  useradd \
-    --system \
-    --shell "/usr/bin/nologin" \
-    --groups "wheel" \
-    "${ANSIBLE_USER}"
-
+  if ! is_user_created "${ANSIBLE_USER_NAME}"; then
+    info "Creating ${ANSIBLE_USER_NAME} system user"
+    useradd \
+      --system \
+      --shell "/usr/bin/nologin" \
+      --groups "wheel" \
+      --create-home \
+      --home-dir "/var/lib/ansible" \
+      "${ANSIBLE_USER_NAME}"
+  fi
 }

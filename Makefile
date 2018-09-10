@@ -34,11 +34,15 @@ chroot: device-mount
 .PHONY: rootfs-copy-bootstrap
 rootfs-copy-bootstrap:
 	sudo rm -Rf "./$(ROOTFS_FOLDER_NAME)/var/local/lib/bootstrap" || true
-	tar -C "./bootstrap" -cf - "." | sudo tar xf - -C "./$(ROOTFS_FOLDER_NAME)"
+	tar -C "./bootstrap" -cf - "." | sudo tar xf - --overwrite -C "./$(ROOTFS_FOLDER_NAME)"
 
 .PHONY: rootfs-bootstrap
 rootfs-bootstrap: rootfs-copy-qemu rootfs-copy-bootstrap
 	sudo arch-chroot "./$(ROOTFS_FOLDER_NAME)" "/usr/local/bin/bootstrap"
+
+.PHONY: rootfs-ansible-playbook
+rootfs-ansible-playbook: rootfs-copy-qemu rootfs-copy-bootstrap
+	sudo arch-chroot "./$(ROOTFS_FOLDER_NAME)" "/usr/local/bin/bootstrap" "ansible-playbook"
 
 .PHONY:
 device-unmount:
@@ -58,6 +62,10 @@ dns-start:
 .PHONY: dns-stop
 dns-stop:
 	make -f "./Makefile.dns" stop
+
+.PHONY: cloud-init
+cloud-init: rootfs-bootstrap
+	sudo arch-chroot "./$(ROOTFS_FOLDER_NAME)" sh -c '/usr/bin/cloud-init clean && cloud-init --debug modules --mode config'
 
 .PHONY: clean
 clean:

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+apply_module()
+{
+  declare folder_path="${1}"
+
+  CHROOT=1 sudo \
+    --user="ansible" \
+    --preserve-env=CHROOT \
+      ansible-playbook \
+        -vvvv \
+        --inventory="${folder_path}/inventory.ini" \
+        "${folder_path}/playbook.yml"
+
+}

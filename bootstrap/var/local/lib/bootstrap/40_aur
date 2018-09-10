@@ -2,15 +2,17 @@
 
 set -euo pipefail
 
-export AUR_USER="aur"
+export AUR_USER_NAME="aur"
 
 apply_module()
 {
-  useradd \
-    --system \
-    --shell "/usr/bin/nologin" \
-    --groups "wheel" \
-    "${AUR_USER}"
+  if ! is_user_created "${AUR_USER_NAME}"; then
+    useradd \
+      --system \
+      --shell "/usr/bin/nologin" \
+      --groups "wheel" \
+      "${AUR_USER_NAME}"
+  fi
 
   pacman \
     --sync \
