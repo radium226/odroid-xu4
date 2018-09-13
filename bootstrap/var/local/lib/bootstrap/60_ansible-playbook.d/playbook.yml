@@ -1,10 +1,93 @@
 ---
 - hosts: localhost
+  gather_facts: no
+  become: yes
   tasks:
   - name: install packages
-    debug:
-      msg: "{{ item }}"
+    pacman:
+      name: "{{ item }}"
+      state: present
     loop:
     - "knockd"
     - "iptables"
-    become: yes
+    - "avahi"
+  # Avahi
+  - name: enable Avahi service
+    systemd:
+      name: "avahi-daemon"
+      enabled: yes
+  - name: start iptables service
+    systemd:
+      name: "avahi-daemon"
+      state: started
+    when: not chroot
+  # Iptables
+  - name: enable iptables service
+    systemd:
+      name: "iptables"
+      enabled: yes
+  - name: start iptables service
+    systemd:
+      name: "iptables"
+      state: started
+    when: not chroot
+  - name: copy iptables rules
+    copy:
+      content: |
+        *filter
+        :INPUT DROP [0:0]
+        :FORWARD DROP [0:0]
+        :OUTPUT ACCEPT [0:0]
+
+        # Loopback
+        -A INPUT -i lo -j ACCEPT
+
+        # ping
+        -A INPUT -p icmp -j ACCEPT
+
+        # SSH (opened using knockd)
+        -A INPUT -p tcp --dport 22 -j DROP
+
+        # Avahi
+        -A INPUT -p udp --dport 5353 -j ACCEPT
+
+        -A INPUT -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+        COMMIT
+      dest: "/etc/iptables/iptables.rules"
+    register: copy_iptables_rules
+  - name: reload iptables services
+    systemd:
+      name: "iptables"
+      state: reloaded
+    when: not chroot and ( copy_iptables_rules | changed )
+  - name: enable knockd service
+    systemd:
+      name: "knockd"
+      enabled: yes
+  - name: start knockd service
+    systemd:
+      name: "knockd"
+      state: started
+    when: not chroot
+  - name: copy knockd config
+    copy:
+      content: |
+        [options]
+          UseSyslog
+        [openSSH]
+          sequence      = 3145:tcp,1414:tcp,2718:tcp
+          seq_timeout   = 60
+          tcpflags      = syn
+          start_command = /usr/bin/iptables -I INPUT 1 -s %IP% -p tcp --dport 22 -j ACCEPT
+        [closeSSH]
+          sequence      = 2718:tcp,1414:tcp,3145:tcp
+          seq_timeout   = 60
+          tcpflags      = syn
+          start_command = /usr/bin/iptables -D INPUT -s %IP% -p tcp --dport 22 -j ACCEPT
+      dest: "/etc/knockd.conf"
+    result: copy_knockd_config
+  - name: start knockd service
+    systemd:
+      name: "knockd"
+      state: restarted
+    when: not chroot and ( copy_knockd_config | changed )

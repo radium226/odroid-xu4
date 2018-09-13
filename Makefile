@@ -76,3 +76,17 @@ clean:
 	#test -f "./$(ARCHIVE_FILE_NAME)" && rm -Rf "./$(ARCHIVE_FILE_NAME)" || true
 	test -d "./$(ROOTFS_FOLDER_NAME)" && rm -Rf "./$(ROOTFS_FOLDER_NAME)" || true
 	make -f "./Makefile.dns" clean
+
+PORT = 80
+.PHONY: nmap
+nmap:
+	sudo nmap -sS -O -p"$(PORT)" "alarm.local"
+
+COMMAND = bash -il
+.PHONY: ssh
+ssh:
+	knock "alarm.local" 3145:tcp 1414:tcp 2718:tcp
+	@sleep 0.5
+	sshpass -p "root" ssh -tt -o "StrictHostKeyChecking no" "root@alarm.local" $(COMMAND)
+	@sleep 0.5
+	knock "alarm.local" 2718:tcp 1414:tcp 3145:tcp

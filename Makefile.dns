@@ -2,6 +2,8 @@ DNSMASQ_FOLDER_PATH = ./.dnsmasq
 
 IFACE_NAME = ens9
 
+EXTERNAL_IFACE_NAME = $(shell route | grep default | tr -s ' ' | cut -d' ' -f8)
+
 NETWORK_PREFIX = 192.168.56
 NETWORK_MASK_BITS = 24
 
@@ -39,8 +41,15 @@ dnsmasq-start: $(DNSMASQ_FOLDER_PATH)/dnsmasq.conf iface-create
 			--conf-file="$(DNSMASQ_FOLDER_PATH)/dnsmasq.conf" \
 			--pid-file="$(shell readlink -f $(DNSMASQ_FOLDER_PATH))/dnsmasq.pid"
 
+.PHONY: iptables-forward
+iptables-forward:
+	sudo iptables -t nat -A POSTROUTING -o "$(EXTERNAL_IFACE_NAME)" -j MASQUERADE
+	sudo iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+	sudo iptables -A FORWARD -i "$(IFACE_NAME)" -o "$(EXTERNAL_IFACE_NAME)" -j ACCEPT
+	sudo sysctl net.ipv4.ip_forward=1
+
 .PHONY: start
-start: iface-create dnsmasq-start
+start: iface-create iptables-forward dnsmasq-start
 
 .PHONY: dnsmasq-stop
 dnsmasq-stop:
