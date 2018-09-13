@@ -78,15 +78,11 @@ clean:
 	make -f "./Makefile.dns" clean
 
 PORT = 80
-.PHONY: nmap
-nmap:
-	sudo nmap -sS -O -p"$(PORT)" "alarm.local"
+.PHONY: tools-nmap
+tools-nmap:
+	make -f "./Makefile.tools" nmap PORT="$(PORT)"
 
 COMMAND = bash -il
-.PHONY: ssh
-ssh:
-	knock "alarm.local" 3145:tcp 1414:tcp 2718:tcp
-	@sleep 0.5
-	sshpass -p "root" ssh -tt -o "StrictHostKeyChecking no" "root@alarm.local" $(COMMAND)
-	@sleep 0.5
-	knock "alarm.local" 2718:tcp 1414:tcp 3145:tcp
+.PHONY: tools-ssh
+tools-ssh:
+	make -f "./Makefile.tools" ssh COMMAND="$(COMMAND)"

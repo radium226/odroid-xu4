@@ -1,0 +1,17 @@
+DNSMASQ_FOLDER_PATH = ./.dnsmasq
+IFACE_NAME = ens9
+HOST_NAME = $(shell cut -d" " -f3 "$(DNSMASQ_FOLDER_PATH)/dnsmasq-leasefile.$(IFACE_NAME)")
+
+COMMAND = bash -il
+.PHONY: ssh
+ssh:
+	knock "$(HOST_NAME)" 3145:tcp 1414:tcp 2718:tcp
+	@sleep 0.5
+	sshpass -p "root" ssh -tt -o "StrictHostKeyChecking=no" -o "GlobalKnownHostsFile=/dev/null" -o "UserKnownHostsFile=/dev/null" "root@$(HOST_NAME)" $(COMMAND) || true
+	@sleep 0.5
+	knock "$(HOST_NAME)" 2718:tcp 1414:tcp 3145:tcp
+
+PORT = 80
+.PHONY: nmap
+nmap:
+	sudo nmap -sS -O -p"$(PORT)" "$(HOST_NAME)"
