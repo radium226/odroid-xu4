@@ -1,0 +1,10 @@
+FOLDER_NAME = infrastructure
+
+.PHONY: init
+init:
+	mkdir -p "./$(FOLDER_NAME)"
+	cd "./$(FOLDER_NAME)" && git init
+
+.PHONY: clean
+clean:
+	rm -Rf "./$(FOLDER_NAME)" || true

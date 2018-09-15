@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -euo pipefail
+
+export AUR_USER_NAME="aur"
+export AUR_SNAPSHOT_URL="https://aur.archlinux.org/cgit/aur.git/snapshot/yay.tar.gz"
+export PACKAGE_NAME="yay"
+
+apply_module()
+{
+  if ! is_package_installed "${PACKAGE_NAME}"; then
+    mkdir -p "/tmp/${PACKAGE_NAME}"
+    cd "/tmp/${PACKAGE_NAME}"
+    wget "${AUR_SNAPSHOT_URL}" -O "./${PACKAGE_NAME}.tar.gz"
+    tar xf "./${PACKAGE_NAME}.tar.gz" --strip-components=1
+    chown -R "${AUR_USER_NAME}:${AUR_USER_NAME}" .
+    sudo -u "${AUR_USER_NAME}" \
+      makepkg \
+        --syncdeps \
+        --install \
+        --noconfirm
+    cd -
+  fi
+}

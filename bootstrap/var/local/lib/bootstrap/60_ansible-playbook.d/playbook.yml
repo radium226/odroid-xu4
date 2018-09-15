@@ -2,6 +2,8 @@
 - hosts: localhost
   gather_facts: no
   become: yes
+  vars:
+    host_name: "odroid-xu4"
   tasks:
   - name: install packages
     pacman:
@@ -13,6 +15,7 @@
     - "avahi"
     - "tcpdump"
     - "vim"
+    - "ack"
   # Avahi
   - name: enable Avahi service
     systemd:
@@ -93,3 +96,12 @@
       name: "knockd"
       state: restarted
     when: not chroot and ( copy_knockd_config | changed )
+  - name: set hostname
+    hostname:
+      name: "{{ host_name }}"
+    when: not chroot
+  - name: set hostname
+    copy:
+      content: "{{ host_name}}"
+      dest: "/etc/hostname"
+    when: chroot

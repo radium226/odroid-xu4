@@ -1,0 +1,18 @@
+http {
+    ...
+    server {
+        listen       80;
+        server_name  macbook-pro;
+
+        location ~ /infrastructure.git(/.*) {
+            # fcgiwrap is set up to listen on this host:port
+            fastcgi_pass  localhost:9001;
+            include       fastcgi_params;
+            fastcgi_param SCRIPT_FILENAME     /usr/lib/git-core/git-http-backend;
+            # export all repositories under GIT_PROJECT_ROOT
+            fastcgi_param GIT_HTTP_EXPORT_ALL "";
+            fastcgi_param GIT_PROJECT_ROOT    /srv/git;
+            fastcgi_param PATH_INFO           $1;
+        }
+    }
+}
