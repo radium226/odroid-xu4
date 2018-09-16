@@ -1,6 +1,6 @@
 REPO_NAME = odroid-xu4
 ARCHIVE_FOLDER_PATH = $(PWD)/.archives
-REPO_FOLDER_PATH = $(PWD)/../gh-pages
+REPO_FOLDER_PATH = $(PWD)/../.gh-pages
 
 $(REPO_FOLDER_PATH)/archlinux:
 	mkdir -p "$(REPO_FOLDER_PATH)/archlinux"
