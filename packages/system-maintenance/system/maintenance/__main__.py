@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from sys import argv
-from yay.jobs import list_upgrades, upgrade_packages, AlwaysYesPrompt, AlwaysNoPrompt
+from system.maintenance import list_upgrades, upgrade_packages, AlwaysYesPrompt, AlwaysNoPrompt
 
 def main(arguments):
     if arguments[1] == "list-upgrades":

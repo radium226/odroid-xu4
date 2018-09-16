@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from yay import System
+from system import System
 from .prompt import Prompt, AlwaysYesPrompt, AlwaysNoPrompt
 
 def list_upgrades():

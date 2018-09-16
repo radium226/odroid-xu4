@@ -3,7 +3,7 @@
 from setuptools import setup
 
 setup(
-    name="yay-jobs",
+    name="system-maintenance",
     version="1.0",
     description="Some timers for Yay",
     license="GPL",
@@ -12,6 +12,6 @@ setup(
     scripts=[],
     packages=[
         "system",
-        "system.jobs"
+        "system.maintenance"
     ]
 )

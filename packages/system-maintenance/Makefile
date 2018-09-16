@@ -1,12 +1,15 @@
-package-upgrade.PHONY: virtualenv
-virtualenv:
+./.venv:
 	virtualenv "./.venv"
 
 .PHONY: virtualenv-activate
-virtualenv-activate:
+virtualenv-activate: ./.venv
 	bash \
 		--rcfile "./bashrc" \
 		-i
+
+.PHONY: upgrade-packages
+upgrade-packages:
+	python -m "system.maintenance" "upgrade-packages"
 
 .PHONY: pip-install-editable
 pip-install-editable:
@@ -49,6 +52,12 @@ clean:
 	rm -Rf "${HOME}/.config/systemd/system/user/package-upgrade.d" || true
 	systemctl --user daemon-reload
 
-.PHONY: makepkg
-makepkg:
-	makepkg
+ARCHIVE_FOLDER_PATH = .
+.PHONY: package
+package:
+	makepkg -c -f -p "./PKGBUILD"
+	if [[ "${ARCHIVE_FOLDER_PATH}" != "." ]]; then \
+		cp \
+			"$$( find "." -name "*.tar.xz" -mindepth 1 -maxdepth 1 -type "f" )" \
+			"$(ARCHIVE_FOLDER_PATH)" ; \
+	fi

@@ -1,0 +1,19 @@
+ARCHIVE_FOLDER_PATH = $(PWD)/.archives
+
+$(ARCHIVE_FOLDER_PATH):
+	mkdir -p "$(ARCHIVE_FOLDER_PATH)"
+
+.PHONY: package
+package: $(ARCHIVE_FOLDER_PATH)
+	declare package_folder_path= ; \
+	find . -maxdepth 1 -mindepth 1 -type "d"  | while read package_folder_path; do \
+		if [[ -f "$${package_folder_path}/PKGBUILD" ]]; then \
+			cd "$${package_folder_path}" ; \
+			make package ARCHIVE_FOLDER_PATH="$(ARCHIVE_FOLDER_PATH)" ; \
+			cd - ; \
+		fi ; \
+	done
+
+.PHONY: clean
+clean:
+	rm -Rf "$(ARCHIVE_FOLDER_PATH)" || true

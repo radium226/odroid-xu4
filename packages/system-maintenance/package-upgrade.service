@@ -1,0 +1,6 @@
+[Unit]
+Description=Upgrade Packages
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python -m "system.maintenance" "upgrade-packages"

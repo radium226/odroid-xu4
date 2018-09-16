@@ -1,0 +1,19 @@
+REPO_NAME = odroid-xu4
+ARCHIVE_FOLDER_PATH = $(PWD)/.archives
+REPO_FOLDER_PATH = $(PWD)/../gh-pages
+
+$(REPO_FOLDER_PATH)/archlinux:
+	mkdir -p "$(REPO_FOLDER_PATH)/archlinux"
+
+.PHONY: copy-archives
+copy-archives: $(REPO_FOLDER_PATH)/archlinux
+	find "$(ARCHIVE_FOLDER_PATH)" -type "f" -name "*.pkg.tar.xz" | \
+		xargs -I {} cp "{}" "$(REPO_FOLDER_PATH)/archlinux"
+
+.PHONY: add-archives-to-repo
+add-archives-to-repo:
+	find "$(REPO_FOLDER_PATH)/archlinux" -type "f" -name "*pkg.tar.xz" -mindepth 1 -maxdepth 1 | \
+		xargs -I {} repo-add "$(REPO_FOLDER_PATH)/archlinux/odroid-xu4.db.tar.gz" "{}"
+
+.PHONY: gh-pages
+gh-pages: copy-archives add-archives-to-repo
