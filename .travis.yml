@@ -6,6 +6,7 @@ env:
     secure: TXQJAVgw2tq0JXArM/p6Q4FWKyQuiy3pmxyjUzS7iW8GTcMWYXE4bW6IHvVhPw9PqY6jTswZ099MorgDv3uqz7rQK/6Nd/MkEPuA+tDcc5glESUKg/R3rYfwhheXXDcsrItE4VH5ONg8GwMXHVDiHyY5atMmHd4KFdJDeDaN/zO75+ctgGgD/VTGDJd4tmkTsRPwMXh5tHGHPP1170JM2prt10OZwzDYh79YImpKiwaPvu0W2swaVyMjV55HPweWwOn0DSIrccokkTcRl2hwzfRTtRv3G9KOpgH9G4alo+roX65BNYiHWxky6O+3HadJQVZESN8gABpn1EuP9nlWZtubl86NUAyh0s+vWzIwsvj3mDLD6uSbHlHDgUQgqSNurJp1ZwwbngqB7crJnXWyBC+E+RaDVGVkTGLW/yoBFplTau+NlToMZcvImZa/wBr66K9pLgct1jrmG/+/qNGf5303n1AwomBZg3+ylZTpM8GBdKsSswAMRt4+HR2PkcfSek9fn76YV+bby8PC88eiQRtSoZLdZFt+j6WfnmwsMSzz5A2q/VgN1w3YWljwtiECt3i6AYABYLdLMoeRSnD6H7IgCP5BNlHYj5JqC/Co+9S1Vf4gjnnV2AwY1EoXGjfTLOJMQUVyFVYh4/CO27qldMajHfb/YJYniZGGpxI0cnE=
 arch:
   repos:
+  - odroid-xu4=http://radium226.github.com/odroid-xu4/archlinux
   packages:
   - make
   - python
