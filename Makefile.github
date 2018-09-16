@@ -1,6 +1,6 @@
 GITHUB_REPO = radium226/odroid-xu4
-GIT_REPO_URL = git@github.com:$(GITHUB_REPO).git
 REPO_FOLDER_PATH = $(PWD)/.gh-pages
+GITHUB_TOKEN=
 
 $(REPO_FOLDER_PATH):
 	mkdir -p "$(REPO_FOLDER_PATH)"
@@ -22,7 +22,11 @@ gh-pages: $(REPO_FOLDER_PATH)
 	git -C "$(REPO_FOLDER_PATH)" config user.name "Travis"
 	git -C "$(REPO_FOLDER_PATH)" add .
 	git -C "$(REPO_FOLDER_PATH)" commit -m "Publishing to Github Pages"
-	git -C "$(REPO_FOLDER_PATH)" push --force --quiet "$(GIT_REPO_URL)" "master:gh-pages"
+	if [[ "$(GITHUB_TOKEN)" != "" ]]; then \
+		git -C "$(REPO_FOLDER_PATH)" push --force --quiet "https://$(GITHUB_TOKEN)@github.com/$(GITHUB_REPO).git" "master:gh-pages" ; \
+	else \
+		git -C "$(REPO_FOLDER_PATH)" push --force --quiet "git@github.com:$(GITHUB_REPO).git" "master:gh-pages" ; \
+	fi
 
 .PHONY: clean
 clean:
