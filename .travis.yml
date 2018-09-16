@@ -5,17 +5,14 @@ services:
 
 arch:
   repos:
-  - papyros=http://dash.papyros.io/repos/$repo/$arch
   packages:
   # pacman packages
+  - make
   - python
-  - perl
+  - python-virtualenv
   # aur packages
-  - go-git
-  # packages from papyros repo
-  - papyros-shell
   script:
-  - "./build_script.sh"
+  - "make -f 'Makefile.ci' package && make -f 'Makefile.github' gh-pages"
 
 script:
 - "curl -s https://raw.githubusercontent.com/mikkeloscar/arch-travis/master/arch-travis.sh | bash"
