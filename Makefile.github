@@ -19,7 +19,7 @@ gh-pages: $(REPO_FOLDER_PATH)
 	# We commit everything to the gh-pages branch
 	git -C "$(REPO_FOLDER_PATH)" init
 	git -C "$(REPO_FOLDER_PATH)" config user.email "travis@travis-ci.org"
-  git -C "$(REPO_FOLDER_PATH)" config user.name "Travis"
+	git -C "$(REPO_FOLDER_PATH)" config user.name "Travis"
 	git -C "$(REPO_FOLDER_PATH)" add .
 	git -C "$(REPO_FOLDER_PATH)" commit -m "Publishing to Github Pages"
 	git -C "$(REPO_FOLDER_PATH)" push --force --quiet "$(GIT_REPO_URL)" "master:gh-pages"
