@@ -11,6 +11,7 @@ arch:
   - make
   - python
   - python-virtualenv
+  - bc
   script:
   - yay -Sy && make -f 'Makefile.ci' package && make -f 'Makefile.github' gh-pages GITHUB_TOKEN="${GITHUB_TOKEN}"
 script:
