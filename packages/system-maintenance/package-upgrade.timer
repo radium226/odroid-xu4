@@ -2,7 +2,7 @@
 Description=Daily Package Upgrade
 
 [Timer]
-OnCalendar=minutely
+OnCalendar=hourly
 Persistent=true
 
 [Install]
