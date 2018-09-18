@@ -52,7 +52,8 @@ clean:
 	rm -Rf "${HOME}/.config/systemd/system/user/package-upgrade.d" || true
 	systemctl --user daemon-reload
 
-.PHONY: pacman-package:
+.PHONY: pacman-package
+pacman-package:
 	make -f "./Makefile.pacman" package
 
 ARCHIVE_FOLDER_PATH = .
