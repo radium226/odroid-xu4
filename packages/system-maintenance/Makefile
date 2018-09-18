@@ -52,12 +52,10 @@ clean:
 	rm -Rf "${HOME}/.config/systemd/system/user/package-upgrade.d" || true
 	systemctl --user daemon-reload
 
+.PHONY: pacman-package:
+	make -f "./Makefile.pacman" package
+
 ARCHIVE_FOLDER_PATH = .
 .PHONY: package
-package:
-	makepkg -c -f -p "./PKGBUILD"
-	if [[ "${ARCHIVE_FOLDER_PATH}" != "." ]]; then \
-		cp \
-			"$$( find "." -name "*.tar.xz" -mindepth 1 -maxdepth 1 -type "f" )" \
-			"$(ARCHIVE_FOLDER_PATH)" ; \
-	fi
+package: pacman-package
+	find . -name "*.pkg.tar.xz" | xargs -I {} cp "{}" "$(ARCHIVE_FOLDER_PATH)"

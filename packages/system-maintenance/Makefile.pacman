@@ -1,0 +1,33 @@
+NAME = $(shell basename "$(PWD)")
+VERSION = $(shell cat "./VERSION")
+OLD_RELEASE = $(shell pacman -Si "$(NAME)" | tr -d ' ' | grep '^Version' | cut -d':' -f2 | cut -d'-' -f2)
+NEW_RELEASE = $(shell echo "$(OLD_RELEASE) + 1" | bc)
+
+./dist/$(NAME)-$(VERSION).tar.gz:
+	python "./setup.py" sdist --format="gztar"
+
+./$(NAME)-$(VERSION).tar.gz: ./dist/$(NAME)-$(VERSION).tar.gz
+	cp "./dist/$(NAME)-$(VERSION).tar.gz" "./$(NAME)-$(VERSION).tar.gz"
+
+package: $(NAME)-$(VERSION).tar.gz
+	PKGNAME="$(NAME)" \
+	PKGVER="$(VERSION)" \
+	PKGREL="$(NEW_RELEASE)" \
+		makepkg \
+			--force \
+			--skipchecksums
+
+.PHONY: debug
+debug:
+	@echo "NAME=$(NAME)"
+	@echo "VERSION=$(VERSION)"
+	@echo "OLD_RELEASE=$(OLD_RELEASE)"
+	@echo "NEW_RELEASE=$(NEW_RELEASE)"
+
+.PHONY: clean
+clean:
+	rm -Rf "./dist" || true
+	rm -Rf "./$(NAME)-$(VERSION).tar.gz" || true
+	rm -Rf "./pkg" || true
+	find . -name "*.pkg.tar.xz" | xargs -I {} rm "{}" || true
+	rm -Rf "./src" || true

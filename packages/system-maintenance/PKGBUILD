@@ -1,14 +1,21 @@
-pkgname='system-maintenance'
-pkgver='1.0'
-pkgrel='1'
-
+pkgname="${PKGNAME}"
+pkgver="${PKGVER}"
+pkgrel="${PKGREL}"
 arch=('any')
 
-source=()
+prepare()
+{
+  echo "BUMP=$( bump_pkgrel )"
+}
+
+source=(
+  "${pkgname}-${pkgver}.tar.gz"
+)
 
 build() {
-  cd "$startdir"
-  python setup.py build
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  ls -alrt
+  python ./setup.py build
 }
 
 package() {
