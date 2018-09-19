@@ -1,15 +1,20 @@
 #!/usr/bin/env python
 
 from sys import argv
-from system.maintenance import list_upgrades, upgrade_packages, AlwaysYesPrompt, AlwaysNoPrompt
+
+from system.maintenance import upgrade, provision
+from system.prompt import AlwaysYesPrompt
 
 def main(arguments):
-    if arguments[1] == "list-upgrades":
-        list_upgrades()
-    elif arguments[1] == "upgrade-packages":
-        upgrade_packages(AlwaysYesPrompt())
+    if len(arguments) == 2:
+        if arguments[1] == "upgrade":
+            upgrade(AlwaysYesPrompt())
+        elif arguments[1] == "provision":
+            provision(AlwaysYesPrompt())
+        else:
+            "Nothing to do!"
     else:
-        print("Nothing to do!")
+        print("Still nothing to do!")
 
 if __name__ == "__main__":
     main(argv)

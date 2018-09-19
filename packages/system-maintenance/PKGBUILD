@@ -22,6 +22,6 @@ package() {
   cd "$startdir"
   python setup.py install --root="$pkgdir/" --optimize=1 --skip-build
   mkdir -p "$pkgdir/usr/lib/systemd/system"
-  install -m644 "$startdir/package-upgrade.service" "${pkgdir}/usr/lib/systemd/system"
-  install -m644 "$startdir/package-upgrade.timer" "${pkgdir}/usr/lib/systemd/system"
+  install -m644 "$startdir/system-maintenance@.service" "${pkgdir}/usr/lib/systemd/system"
+  install -m644 "$startdir/system-maintenance@.timer" "${pkgdir}/usr/lib/systemd/system"
 }

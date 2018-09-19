@@ -1,0 +1,6 @@
+[Unit]
+Description=System Maintenance
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python -m "system.maintenance" "%i"

@@ -29,6 +29,7 @@ setup(
         "system.tools.ansible",
         "system.tools.git",
         "system.tools.yay",
-        "system.maintenance"
+        "system.maintenance",
+        "system.prompt"
     ]
 )
