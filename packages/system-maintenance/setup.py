@@ -26,6 +26,9 @@ setup(
     scripts=[],
     packages=[
         "system",
+        "system.tools.ansible",
+        "system.tools.git",
+        "system.tools.yay",
         "system.maintenance"
     ]
 )

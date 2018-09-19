@@ -33,7 +33,7 @@ class Upgrade:
     def __str__(self):
         return f"Upgrade(package={self.package}, old_version={self.old_version}, new_version={self.new_version})"
 
-class System:
+class Yay:
 
     @classmethod
     def refresh_available_packages(cls):
