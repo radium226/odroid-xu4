@@ -25,7 +25,6 @@ setup(
     install_requires=[],
     scripts=[],
     packages=[
-        "system",
         "system.tools.ansible",
         "system.tools.git",
         "system.tools.yay",

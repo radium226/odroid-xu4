@@ -5,7 +5,7 @@ arch=('any')
 
 prepare()
 {
-  echo "BUMP=$( bump_pkgrel )"
+  :
 }
 
 source=(
@@ -15,11 +15,13 @@ source=(
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   ls -alrt
+  find . -type "f"
+  pwd
   python ./setup.py build
 }
 
 package() {
-  cd "$startdir"
+  cd "${srcdir}/${pkgname}-${pkgver}"
   python setup.py install --root="$pkgdir/" --optimize=1 --skip-build
   mkdir -p "$pkgdir/usr/lib/systemd/system"
   install -m644 "$startdir/system-maintenance@.service" "${pkgdir}/usr/lib/systemd/system"

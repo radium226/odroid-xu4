@@ -13,7 +13,9 @@ class Context:
         "provision": {
             "host_name": socket.gethostname(),
             "inventory_file_path": "inventory.ini",
-            "playbook_file_path": "provision.yml"
+            "playbook_file_path": "provision.yml",
+            "git_repo_url": "https://github.com/radium226/odroid-xu4.git",
+            "folder_path": "ansible"
         }
     }
 

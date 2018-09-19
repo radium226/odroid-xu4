@@ -24,10 +24,16 @@ debug:
 	@echo "OLD_RELEASE=$(OLD_RELEASE)"
 	@echo "NEW_RELEASE=$(NEW_RELEASE)"
 
+.PHONY: install
+install: package
+	find . -name "*.pkg.tar.xz" | xargs -I {} yay -U "{}" --noconfirm
+
 .PHONY: clean
 clean:
+	python "./setup.py" clean
 	rm -Rf "./dist" || true
 	rm -Rf "./$(NAME)-$(VERSION).tar.gz" || true
 	rm -Rf "./pkg" || true
 	find . -name "*.pkg.tar.xz" | xargs -I {} rm "{}" || true
 	rm -Rf "./src" || true
+	rm -Rf "system_maintenance.egg-info" || true
