@@ -1,0 +1,3 @@
+Defaults:system-maintenance !requiretty
+Defaults:system-maintenance env_keep += "PATH"
+system-maintenance ALL=(ALL) NOPASSWD:ALL

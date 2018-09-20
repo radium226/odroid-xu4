@@ -10,6 +10,12 @@ prepare()
 
 source=(
   "${pkgname}-${pkgver}.tar.gz"
+  "usr_lib_systemd_system_system-maintenance@.service"
+  "usr_lib_systemd_system_system-maintenance@.timer"
+  "usr_lib_sysusers.d_system-maintenance.conf"
+  "etc_sudoers.d_system-maintenance"
+  "usr_lib_tmpfiles.d_system-maintenance.conf"
+
 )
 
 build() {
@@ -22,8 +28,25 @@ build() {
 
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
-  python setup.py install --root="$pkgdir/" --optimize=1 --skip-build
-  mkdir -p "$pkgdir/usr/lib/systemd/system"
-  install -m644 "$startdir/system-maintenance@.service" "${pkgdir}/usr/lib/systemd/system"
-  install -m644 "$startdir/system-maintenance@.timer" "${pkgdir}/usr/lib/systemd/system"
+  python setup.py install --root="${pkgdir}/" --optimize=1 --skip-build
+
+  install -Dm0644 \
+    "${srcdir}/usr_lib_systemd_system_system-maintenance@.service" \
+    "${pkgdir}/usr/lib/systemd/system/system-maintenance@.service"
+
+  install -Dm0644 \
+    "$startdir/usr_lib_systemd_system_system-maintenance@.timer" \
+    "${pkgdir}/usr/lib/systemd/system/system-maintenance@.timer"
+
+  install -Dm0644 \
+    "${srcdir}/usr_lib_sysusers.d_system-maintenance.conf" \
+    "${pkgdir}/usr/lib/sysusers.d/system-maintenance.conf"
+
+  install -Dm0644 \
+    "${srcdir}/usr_lib_tmpfiles.d_system-maintenance.conf" \
+    "${pkgdir}/usr/lib/tmpfiles.d/system-maintenance.conf"
+
+  install -Dm660 \
+    "${srcdir}/etc_sudoers.d_system-maintenance" \
+    "${pkgdir}/etc/sudoers.d/system-maintenance"
 }

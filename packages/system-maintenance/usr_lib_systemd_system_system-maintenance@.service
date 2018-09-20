@@ -3,4 +3,5 @@ Description=System Maintenance
 
 [Service]
 Type=oneshot
+User=system-maintenance
 ExecStart=/usr/bin/python -m "system.maintenance" "%i"
