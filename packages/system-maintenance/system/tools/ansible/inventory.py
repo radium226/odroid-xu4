@@ -34,13 +34,13 @@ class Inventory:
         hosts = {}
         for ansible_host in ansible_inventory_manager.get_hosts():
             name = ansible_host.name
-            print(" --> " + name)
+            #print(" --> " + name)
             _vars = {var_name: ansible_host.vars[var_name] for var_name in (set(ansible_host.vars.keys()) - set(["inventory_dir", "inventory_file"]))}
             pprint(vars(ansible_host))
             hosts[name] = Host(name, vars=_vars)
-        print("==================")
-        print(hosts)
-        print("==================")
+        #print("==================")
+        #print(hosts)
+        #print("==================")
 
         groups = {}
         for ansible_group in filter(lambda ansible_group: ansible_group.name not in ["all", "ungrouped"], ansible_inventory_manager.groups.values()):
@@ -49,9 +49,9 @@ class Inventory:
             pprint(vars(ansible_group))
             groups[name] = Group(name, host_names=list(map(lambda ansible_host: ansible_host.name, ansible_group.hosts)), vars=_vars)
 
-        print("--------------------")
-        print(groups)
-        print("--------------------")
+        #print("--------------------")
+        #print(groups)
+        #print("--------------------")
         return cls(hosts=list(hosts.values()), groups=list(groups.values()))
 
     @classmethod

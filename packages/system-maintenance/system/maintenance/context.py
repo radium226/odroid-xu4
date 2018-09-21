@@ -6,6 +6,8 @@ import toml
 from pathlib import Path
 import socket
 
+from deepmerge import Merger
+from copy import deepcopy
 
 class Context:
 
@@ -29,15 +31,30 @@ class Context:
         return str(self)
 
     @staticmethod
+    def _merge_config(left_config, right_config):
+        merger = Merger(
+            [
+                (list, ["append"]),
+                (dict, ["merge"])
+            ],
+            ["override"],
+            ["override"]
+        )
+        merged_config = deepcopy(left_config)
+        merger.merge(merged_config, right_config)
+        return merged_config
+
+    @staticmethod
     def _read_config():
         file_paths = [
             Path("/etc/system-maintenance.toml"),
             Path(os.getcwd()) / "system-maintenance.toml"
         ]
         print(file_paths)
-        config = reduce(lambda left_config, right_config: {**left_config, **right_config},
+        config = reduce(Context._merge_config,
             map(lambda file_path: toml.loads(file_path.read_text()),
                 filter(lambda file_path: file_path.exists(), file_paths)), Context.DEFAULT_CONFIG)
+        print(config)
         return config
 
 if __name__ == "__main__":

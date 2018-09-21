@@ -15,5 +15,5 @@ def provision(prompt):
     Git.clone(context.config["provision"]["git_repo_url"], repo_folder_path)
     provisioning_folder_path = repo_folder_path / context.config["provision"]["folder_path"]
     host_name = context.config["provision"]["host_name"]
-    inventory = Inventory.read(provisioning_folder_path / context.config["provision"]["inventory_file_path"]).modify_host(host_name, ansible_connection="local", ansible_port=None, ansible_host=None)
-    Ansible(inventory).run_playbook(provisioning_folder_path / context.config["provision"]["playbook_file_path"], limit=[host_name])
+    inventory = Inventory.read(provisioning_folder_path / context.config["provision"]["inventory_file_path"])#.modify_host(host_name, ansible_connection="local", ansible_port=None, ansible_host=None)
+    Ansible(inventory).run_playbook(provisioning_folder_path / context.config["provision"]["playbook_file_path"], limit=[host_name], local=True)
