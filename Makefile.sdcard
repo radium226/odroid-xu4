@@ -18,4 +18,4 @@ fuse:
 
 .PHONY: clean
 clean:
-	sudo sfdisk --delete "$(BLOCK)"
+	sudo sfdisk --delete "$(BLOCK_PATH)"
