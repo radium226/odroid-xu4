@@ -19,12 +19,13 @@ copy-pkgbuild: pypi2pkgbuild
 
 .PHONY: makepkg
 makepkg: copy-pkgbuild
-	makepkg
+	makepkg \
+		--force
 
 .PHONY: package
 package: makepkg
 	if [[ "$(ARCHIVE_FOLDER_PATH)" != "." ]]; then \
-		find "." -name "*.pkg.tar.xz" -mindepth 1 -maxdepth=1 | \
+		find "." -name "*.pkg.tar.xz" -mindepth 1 -maxdepth 1 | \
 			xargs -I {} cp "{}" "$(ARCHIVE_FOLDER_PATH)" ; \
 	fi
 
