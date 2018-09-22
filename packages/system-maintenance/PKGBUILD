@@ -8,6 +8,11 @@ prepare()
   :
 }
 
+depends=(
+  "python-toml"
+  "python-deepmerge"
+)
+
 source=(
   "${pkgname}-${pkgver}.tar.gz"
   "usr_lib_systemd_system_system-maintenance@.service"

@@ -1,0 +1,7 @@
+/python-deepmerge/
+/PKGBUILD
+/PKGBUILD_EXTRAS
+/*.whl
+/LICENSE
+/pkg
+/src
