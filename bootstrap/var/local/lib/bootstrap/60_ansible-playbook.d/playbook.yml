@@ -76,7 +76,7 @@
         -A INPUT -p icmp -j ACCEPT
 
         # SSH (opened using knockd)
-        -A INPUT -p tcp --dport 22 -j ACCEPT
+        #-A INPUT -p tcp --dport 22 -j ACCEPT
 
         # Avahi
         -A INPUT -p udp --dport 5353 -j ACCEPT
@@ -116,7 +116,7 @@
           tcpflags      = syn
           start_command = /usr/bin/iptables -D INPUT -s %IP% -p tcp --dport 22 -j ACCEPT
       dest: "/etc/knockd.conf"
-    result: copy_knockd_config
+    register: copy_knockd_config
   - name: start knockd service
     systemd:
       name: "knockd"
