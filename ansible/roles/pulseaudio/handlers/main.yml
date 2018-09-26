@@ -2,7 +2,7 @@
 - name: reload systemd
   systemd:
     daemon_reload: yes
-- name: restart Pulseaudio
+- name: restart PulseAudio
   systemd:
     name: "pulseaudio.service"
     state: restarted

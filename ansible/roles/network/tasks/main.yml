@@ -41,6 +41,6 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
   loop:
-  - { regexp: "#?use-ipv4=.*$", line: "use-ipv4=yes" }
-  - { regexp: "#?use-ipv6=.*$", line: "use-ipv6=no" }
+  - { regexp: "(# *)?use-ipv4=.*$", line: "use-ipv4=yes" }
+  - { regexp: "(# *)?use-ipv6=.*$", line: "use-ipv6=no" }
   notify: reload Avahi

@@ -3,6 +3,23 @@
   vars:
     network_iface_mac_address: "00:1e:06:30:90:0e"
     network_iface_name: "en01"
+    pulseaudio_cards:
+    - {
+        name: "alsa_card.usb-C-Media_Electronics_Inc._USB_Audio_Device-00",
+        profile: "output:analog-stereo"
+      }
+    - {
+        name: "alsa_card.platform-sound",
+        profile: "off"
+      }
+    pulseaudio_sinks:
+    - {
+        name: "alsa_output.usb-C-Media_Electronics_Inc._USB_Audio_Device-00.analog-stereo",
+        description: "ODroid-XU4"
+      }
   roles:
   - network
-  - pulseaudio
+  - {
+      role: pulseaudio,
+      tags: ["audio"]
+    }
