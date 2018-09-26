@@ -1,5 +1,8 @@
 ---
-- hosts: all
-  tasks:
-  - debug:
-      msg: "Hello, World!"
+- hosts: odroid-xu4
+  vars:
+    network_iface_mac_address: "00:1e:06:30:90:0e"
+    network_iface_name: "en01"
+  roles:
+  - network
+  - pulseaudio

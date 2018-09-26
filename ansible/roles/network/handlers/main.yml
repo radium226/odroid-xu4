@@ -1,0 +1,15 @@
+---
+- name: reload udev
+  shell: |
+    udevadm control --reload-rules
+    udevadm trigger
+- name: restart systemd-networkd
+  systemd:
+    name: "systemd-networkd.service"
+    state: restarted
+- name: reload Avahi
+  systemd:
+    name: "avahi-daemon"
+    state: reloaded
+- name: run systemd-sysctl
+  command: "/usr/lib/systemd/systemd-sysctl"

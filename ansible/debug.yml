@@ -1,0 +1,7 @@
+---
+- hosts: odroid-xu4
+  tasks:
+  - debug:
+      msg: "Hello, {{ ansible_host }}! "
+  - shell: |
+      ls -alrt / | grep "PROOF"

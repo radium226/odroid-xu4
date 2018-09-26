@@ -1,0 +1,31 @@
+---
+- name: create systemd mount
+  copy:
+    content: |
+      [Unit]
+      Description=Data Mount
+
+      [Mount]
+      What=/dev/disk/by-label/DATA
+      Where=/mnt/DATA
+      Type=btrfs
+      TimeoutSec=10s
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: "/etc/systemd/system/mnt-DATA.mount"
+  notify: reload systemd
+- name: create systemd autoumount
+  copy:
+    content: |
+      [Unit]
+      Description=Data Automount Point
+
+      [Automount]
+      Where=/mnt/DATA
+      TimeoutIdleSec=1min
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: "/etc/systemd/system/mnt-DATA.automount"
+  notify: reload systemd

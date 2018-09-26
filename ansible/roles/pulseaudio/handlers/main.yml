@@ -1,0 +1,18 @@
+---
+- name: reload systemd
+  systemd:
+    daemon_reload: yes
+- name: restart Pulseaudio
+  systemd:
+    name: "pulseaudio.service"
+    state: restarted
+- name: run systemd-sysusers
+  command: |
+    /usr/bin/systemd-sysusers
+- name: run systemd-tmpfiles
+  command: |
+    /usr/bin/systemd-tmpfiles --create
+- name: reload udev
+  shell: |
+    udevadm control --reload-rules
+    udevadm trigger
