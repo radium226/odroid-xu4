@@ -1,25 +1,26 @@
 ---
 - hosts: odroid-xu4
   vars:
+    iface_name: "en01"
     network_iface_mac_address: "00:1e:06:30:90:0e"
     network_iface_name: "en01"
     pulseaudio_cards:
-    - {
-        name: "alsa_card.usb-C-Media_Electronics_Inc._USB_Audio_Device-00",
-        profile: "output:analog-stereo"
-      }
-    - {
-        name: "alsa_card.platform-sound",
-        profile: "off"
-      }
+    - name: "alsa_card.usb-C-Media_Electronics_Inc._USB_Audio_Device-00"
+      profile: "output:analog-stereo"
+    - name: "alsa_card.platform-sound"
+      profile: "off"
     pulseaudio_sinks:
-    - {
-        name: "alsa_output.usb-C-Media_Electronics_Inc._USB_Audio_Device-00.analog-stereo",
-        description: "ODroid-XU4"
-      }
+    - name: "alsa_output.usb-C-Media_Electronics_Inc._USB_Audio_Device-00.analog-stereo"
+      description: "ODroid-XU4"
   roles:
-  - network
-  - {
-      role: pulseaudio,
-      tags: ["audio"]
-    }
+  #- role: "network"
+  #- role: "pulseaudio"
+  #  tags: ["audio"]
+  #- role: "external-storage"
+  #  tags: ["data"]
+  - role: "iptables"
+    vars:
+      iptables_iface_name: "{{ iface_name }}"
+  - role: "knockd"
+    vars:
+      knockd_iface_name: "{{ iface_name }}"

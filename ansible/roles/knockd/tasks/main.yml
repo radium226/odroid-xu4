@@ -1,0 +1,38 @@
+- name: install packages
+  yay:
+    name: "knockd"
+    state: present
+
+- name: create folder for systemd service drop-ins
+  file:
+    path: "/etc/systemd/systemd/knockd.service.d"
+    state: directory
+- name: add systemd service drop-in to allow rules to be splitted
+  copy:
+    content: |
+      [Service]
+      ExecStart=
+      ExecStart=/bin/sh -c 'find /etc/knockd.conf.d/ -maxdepth 1 -name "*.rules" -type "f" -print0 | sort -z | xargs -0 -I {} cat "{}" | /usr/bin/knockd --config "/dev/stdin"'
+    dest: "/etc/systemd/system/knockd.service.d/00-allow-rules-to-be-splitted"
+  notify:
+  - reload systemd daemon
+  - restart knockd service
+
+- name: create folder for config
+  file:
+    path: "/etc/knockd.conf.d"
+    state: directory
+- name: add options
+  copy:
+    content: |
+      [options]
+        UseSyslog
+        Interface = {{ knockd_iface_name }}
+    dest: "/etc/knockd.conf.d/00-options.rules"
+  notify: restart knockd service
+
+- name: start service
+  systemd:
+    name: "knockd.service"
+    state: started
+    enabled: yes

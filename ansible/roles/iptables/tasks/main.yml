@@ -1,0 +1,53 @@
+- name: install packages
+  yay:
+    name: "iptables"
+    state: present
+
+- name: create folder for systemd service drop-ins
+  file:
+    path: "/etc/systemd/systemd/iptables.service.d"
+    state: directory
+- name: add systemd service drop-in to allow rules to be splitted
+  copy:
+    content: |
+      [Service]
+      ExecStart=
+      ExecStart=/bin/sh -c 'find /etc/iptables/iptables.rules.d/ -maxdepth 1 -name "*.rules" -type "f" -print0 | sort -z | xargs -0 -I {} cat "{}" | iptables-restore'
+      ExecReload=
+      ExecReload=/bin/sh -c 'find /etc/iptables/iptables.rules.d/ -maxdepth 1 -name "*.rules" -type "f" -print0 | sort -z | xargs -0 -I {} cat "{}" | iptables-restore'
+    dest: "/etc/systemd/system/iptables.service.d/00-allow-rules-to-be-splitted"
+  notify:
+  - reload systemd daemon
+  - restart iptables service
+
+- name: create folder for rules
+  file:
+    path: "/etc/iptables/iptables.rules.d"
+    state: directory
+- name: add default rules
+  copy:
+    content: |
+      *filter
+      :INPUT DROP [0:0]
+      :FORWARD DROP [0:0]
+      :OUTPUT ACCEPT [0:0]
+    dest: "/etc/iptables/iptables.rules.d/00-default.rules"
+  notify: restart iptables service
+- name: add rule to allow existing connections to be kept
+  copy:
+    content: |
+      -A INPUT -i {{ iptables_iface_name }} -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+    dest: "/etc/iptables/iptables.rules.d/98-existing-connections.rules"
+  notify: restart iptables service
+- name: add commit rule
+  copy:
+    content: |
+      COMMIT
+    dest: "/etc/iptables/iptables.rules.d/99-commit.rules"
+  notify: restart iptables service
+
+- name: start service
+  systemd:
+    name: "iptables.service"
+    state: started
+    enabled: yes

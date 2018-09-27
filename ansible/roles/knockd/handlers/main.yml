@@ -1,0 +1,4 @@
+- name: restart knockd service
+  systemd:
+    name: "knockd.service"
+    state: restarted
