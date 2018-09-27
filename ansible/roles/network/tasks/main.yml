@@ -48,5 +48,5 @@
   copy:
     content: |
       -A INPUT -i {{ avahi_iface_name }} -p udp --dport {{ avahi_port }} -j ACCEPT
-    dest: "/etc/iptables/iptables.rules.d/10-pulseaudio.conf"
+    dest: "/etc/iptables/iptables.rules.d/10-avahi.conf"
   notify: restart iptables service
