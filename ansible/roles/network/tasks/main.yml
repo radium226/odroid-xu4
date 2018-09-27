@@ -44,9 +44,15 @@
   - { regexp: "(# *)?use-ipv4=.*$", line: "use-ipv4=yes" }
   - { regexp: "(# *)?use-ipv6=.*$", line: "use-ipv6=no" }
   notify: reload Avahi
-- name: add iptables rule
+- name: add iptables rule for Avahi
   copy:
     content: |
       -A INPUT -i {{ avahi_iface_name }} -p udp --dport {{ avahi_port }} -j ACCEPT
-    dest: "/etc/iptables/iptables.rules.d/10-avahi.conf"
+    dest: "/etc/iptables/iptables.rules.d/10-avahi.rules"
   notify: restart iptables service
+- name: add iptables rule to allow ping
+  copy:
+    content: |
+      -A INPUT -i {{ avahi_iface_name }} -p icmp -j ACCEPT
+    dest: "/etc/iptables/iptables.rules.d/10-ping.rules"
+notify: restart iptables service
