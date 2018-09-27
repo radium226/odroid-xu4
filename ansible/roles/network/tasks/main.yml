@@ -55,4 +55,4 @@
     content: |
       -A INPUT -i {{ avahi_iface_name }} -p icmp -j ACCEPT
     dest: "/etc/iptables/iptables.rules.d/10-ping.rules"
-notify: restart iptables service
+  notify: restart iptables service
