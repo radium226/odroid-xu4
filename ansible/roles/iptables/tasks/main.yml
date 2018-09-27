@@ -12,10 +12,10 @@
     content: |
       [Service]
       ExecStart=
-      ExecStart=/bin/sh -c 'find /etc/iptables/iptables.rules.d/ -maxdepth 1 -name "*.rules" -type "f" -print0 | sort -z | xargs -0 -I {} cat "{}" | iptables-restore'
+      ExecStart=/bin/sh -c 'find /etc/iptables/iptables.rules.d/ -maxdepth 1 -name "*.rules" -type "f" -print0 | sort -z | xargs -0 -I {} cat "{}" | /usr/bin/iptables-restore'
       ExecReload=
-      ExecReload=/bin/sh -c 'find /etc/iptables/iptables.rules.d/ -maxdepth 1 -name "*.rules" -type "f" -print0 | sort -z | xargs -0 -I {} cat "{}" | iptables-restore'
-    dest: "/etc/systemd/system/iptables.service.d/00-allow-rules-to-be-splitted"
+      ExecReload=/bin/sh -c 'find /etc/iptables/iptables.rules.d/ -maxdepth 1 -name "*.rules" -type "f" -print0 | sort -z | xargs -0 -I {} cat "{}" | /usr/bin/iptables-restore'
+    dest: "/etc/systemd/system/iptables.service.d/00-allow-rules-to-be-splitted.conf"
   notify:
   - reload systemd daemon
   - restart iptables service
@@ -33,6 +33,12 @@
       :OUTPUT ACCEPT [0:0]
     dest: "/etc/iptables/iptables.rules.d/00-default.rules"
   notify: restart iptables service
+- name: add rule to allow loopback connections
+  copy:
+    content: |
+      -A INPUT -i lo -j ACCEPT
+    dest: "/etc/iptables/iptables.rules.d/10-loopback.rules"
+  notify: restart iptables service
 - name: add rule to allow existing connections to be kept
   copy:
     content: |
@@ -45,6 +51,10 @@
       COMMIT
     dest: "/etc/iptables/iptables.rules.d/99-commit.rules"
   notify: restart iptables service
+- name: remove old rules
+  file:
+    path: "/etc/iptables/iptables.rules"
+    state: absent
 
 - name: start service
   systemd:

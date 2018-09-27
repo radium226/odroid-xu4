@@ -76,3 +76,9 @@
         d /var/cache/pulse 0755 pulse pulse -
       dest: "/etc/tmpfiles.d/pulseaudio.conf"
     notify: run systemd-tmpfiles
+  - name: add iptables rule
+    copy:
+      content: |
+        -A INPUT -i {{ pulseaudio_iface_name }} -p tcp --dport {{ pulseaudio_port }} -j ACCEPT
+      dest: "/etc/iptables/iptables.rules.d/10-pulseaudio.rules"
+    notify: restart iptables service

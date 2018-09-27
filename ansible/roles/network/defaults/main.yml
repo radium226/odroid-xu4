@@ -1,0 +1,3 @@
+---
+avahi_iface_name: "{{ network_iface_name }}"
+avahi_port: 5353

@@ -16,3 +16,7 @@
   shell: |
     udevadm control --reload-rules
     udevadm trigger
+- name: restart iptables service
+  systemd:
+    name: "iptables.service"
+    state: restarted

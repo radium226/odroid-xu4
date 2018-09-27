@@ -44,3 +44,9 @@
   - { regexp: "(# *)?use-ipv4=.*$", line: "use-ipv4=yes" }
   - { regexp: "(# *)?use-ipv6=.*$", line: "use-ipv6=no" }
   notify: reload Avahi
+- name: add iptables rule
+  copy:
+    content: |
+      -A INPUT -i {{ avahi_iface_name }} -p udp --dport {{ avahi_port }} -j ACCEPT
+    dest: "/etc/iptables/iptables.rules.d/10-pulseaudio.conf"
+  notify: restart iptables service

@@ -2,3 +2,7 @@
   systemd:
     name: "knockd.service"
     state: restarted
+
+- name: reload systemd daemon
+  systemd:
+    daemon_reload: yes
