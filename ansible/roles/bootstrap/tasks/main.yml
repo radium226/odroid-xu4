@@ -1,0 +1,28 @@
+---
+- name: disable IPv6
+  sysctl:
+    name: "net.ipv6.conf.all.disable_ipv6"
+    value: "1"
+    state: present
+    sysctl_file: "/etc/sysctl.d/10-disable-ipv6.conf"
+  notify: run systemd-sysctl
+- name: setup network link
+  copy:
+    content: |
+      [Match]
+      MACAddress={{ bootstrap_iface_mac_address}}
+
+      [Link]
+      Name={{ bootstrap_iface_name }}
+    dest: "/etc/systemd/network/50-{{ bootstrap_iface_name }}.link"
+  notify: reload udev
+- name: setup network
+  copy:
+    content: |
+      [Match]
+      Name={{ bootstrap_iface_name }}
+
+      [Network]
+      DHCP=yes
+    dest: "/etc/systemd/network/{{ bootstrap_iface_name }}.network"
+  notify: restart systemd-networkd

@@ -1,0 +1,6 @@
+---
+- hosts: odroid-xu4
+  gather_facts: no
+  become: yes
+  roles:
+  - role: done-to-a-turn

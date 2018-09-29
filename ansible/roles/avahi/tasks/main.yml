@@ -1,0 +1,28 @@
+---
+- name: install packages
+  yay:
+    name: "avahi"
+    state: present
+
+- name: start service
+  systemd:
+    name: "avahi-daemon.service"
+    state: started
+    enabled: yes
+
+- name: force IPv4
+  lineinfile:
+    dest: "/etc/avahi/avahi-daemon.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  loop:
+  - { regexp: "(# *)?use-ipv4=.*$", line: "use-ipv4=yes" }
+  - { regexp: "(# *)?use-ipv6=.*$", line: "use-ipv6=no" }
+  notify: reload avahi service
+
+- name: add iptables rules
+  copy:
+    content: |
+      -A INPUT -i {{ avahi_iface_name }} -p udp --dport {{ avahi_port }} -j ACCEPT
+    dest: "/etc/iptables/iptables.rules.d/10-avahi.rules"
+  notify: restart iptables service

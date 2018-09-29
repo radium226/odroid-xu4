@@ -1,12 +1,12 @@
 ---
-- name: install PulseAudio packages
+- name: install packages
   yay:
     name: "{{ item }}"
     state: present
   loop:
   - pulseaudio
   - pulseaudio-zeroconf
-- name: copy PulseAudio service
+- name: copy service file for systemd
   copy:
     content: |
       [Unit]
@@ -20,7 +20,7 @@
       WantedBy=multi-user.target
     dest: "/etc/systemd/system/pulseaudio.service"
   notify: reload systemd
-- name: start PulseAudio
+- name: start service
   systemd:
     name: "pulseaudio.service"
     state: started
@@ -29,16 +29,15 @@
   file:
     path: "/etc/sysusers.d"
     state: directory
-- name: configure PulseAudio
-  block:
+- block:
   #- copy:
   #    content: |
   #      SUBSYSTEM=="sound", ATTR{id}=="OdroidXU4", ENV{PULSE_IGNORE}="1"
   #    dest: "/etc/udev/rules.d/72-pulseaudio.rules"
   #  notify:
   #  - reload udev
-  #  - restart PulseAudio
-  - name: configure PulseAudio modules
+  #  - restart pulseaudio service
+  - name: add modules
     lineinfile:
       dest: "/etc/pulse/system.pa"
       regexp: "{{ item.regexp }}"
@@ -46,31 +45,31 @@
     loop:
     - { regexp: "(# *)?load-module module-zeroconf-publish", line: "load-module module-zeroconf-publish" }
     - { regexp: "(# *)?load-module module-native-protocol-tcp", line: "load-module module-native-protocol-tcp auth-anonymous=1" }
-    notify: restart PulseAudio
-  - name: set PulseAudio card profiles
+    notify: restart pulseaudio service
+  - name: set card profiles
     lineinfile:
       regexp: "(# *)?set-card-profile {{ item.name }}"
       line: "set-card-profile {{ item.name }} {{ item.profile }}"
       dest: "/etc/pulse/system.pa"
     when: item.profile
     loop: "{{ pulseaudio_cards }}"
-    notify: restart PulseAudio
-  - name: set PulseAudio sink descriptions
+    notify: restart pulseaudio service
+  - name: set sink descriptions
     lineinfile:
       regexp: "(# *)?update-sink-proplist {{ item.name }}"
       line: "update-sink-proplist {{ item.name }} device.description={{ item.description }}"
       dest: "/etc/pulse/system.pa"
     when: item.description
     loop: "{{ pulseaudio_sinks }}"
-    notify: restart PulseAudio
-  - name: add PulseAudio tmpfiles
+    notify: restart pulseaudio service
+  - name: add tmpfiles for systemd
     copy:
       content: |
         u pulse - - /var/cache/pulse
         g pulse-access - -
       dest: "/etc/sysusers.d/pulseaudio.conf"
     notify: run systemd-sysusers
-  - name: add PulseAudio sysusers
+  - name: add sysusers for systemd
     copy:
       content: |
         d /var/cache/pulse 0755 pulse pulse -

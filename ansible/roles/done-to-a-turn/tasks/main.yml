@@ -1,0 +1,48 @@
+---
+- name: install nginx packages
+  yay:
+    name: "nginx"
+    state: present
+- name: configure nginx
+  copy:
+    content: |
+      worker_processes  1;
+      events {
+          worker_connections  1024;
+      }
+
+      http {
+          include       mime.types;
+          default_type  application/octet-stream;
+          sendfile        on;
+          keepalive_timeout  65;
+          server {
+              listen       80 default_server;
+              server_name  _;
+
+              location / {
+                  root   "/mnt/DATA/Others/Done to a Turn";
+                  autoindex on;
+                  auth_basic "Done to a Turn";
+                  auth_basic_user_file /etc/nginx/.htpasswd;
+              }
+
+              error_page   500 502 503 504  /50x.html;
+              location = /50x.html {
+                  autoindex on;
+              }
+          }
+      }
+    dest: "/etc/nginx/nginx.conf"
+  notify: reload nginx service
+- name: add iptables rules
+  copy:
+    content: |
+      -A INPUT -i en01 -p tcp --dport 80 -j ACCEPT
+    dest: "/etc/iptables/iptables.rules.d/10-nginx.rules"
+  notify: restart iptables service
+- name: start nginx service
+  systemd:
+    name: "nginx"
+    state: started
+    enabled: yes

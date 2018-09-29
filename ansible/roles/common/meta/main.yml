@@ -1,0 +1,11 @@
+---
+dependencies:
+- role: "iptables"
+  vars:
+    iptables_iface_name: "{{ common_iface_name }}"
+- role: "knockd"
+  vars:
+    knockd_iface_name: "{{ common_iface_name }}"
+- role: "avahi"
+  vars:
+    avahi_iface_name: "{{ common_iface_name }}"

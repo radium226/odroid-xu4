@@ -1,5 +1,5 @@
 ---
-- name: create systemd mount for disks
+- name: create disk mount for systemd
   copy:
     content: |
       [Unit]
@@ -16,7 +16,7 @@
     dest: "/etc/systemd/system/mnt-DATA.mount"
   notify: reload systemd
 
-- name: create systemd autoumount for disks
+- name: create disk autoumount for systemd
   copy:
     content: |
       [Unit]
@@ -37,7 +37,7 @@
     state: started
     enabled: yes
 
-- name: create systemd mount for NFS
+- name: create NFS mount for systemd
   copy:
     content: |
       [Unit]
@@ -54,7 +54,7 @@
     dest: "/etc/systemd/system/srv-nfs4-DATA.mount"
   notify: reload systemd
 
-- name: create systemd automount for NFS
+- name: create NFS automount for systemd
   copy:
     content: |
       [Unit]
@@ -69,7 +69,7 @@
     dest: "/etc/systemd/system/srv-nfs4-DATA.automount"
   notify: reload systemd
 
-- name: start systemd automount for NFS
+- name: start NFS automount for systemd
   systemd:
     name: "srv-nfs4-DATA.automount"
     state: started

@@ -45,6 +45,12 @@
       -A INPUT -i {{ iptables_iface_name }} -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
     dest: "/etc/iptables/iptables.rules.d/98-existing-connections.rules"
   notify: restart iptables service
+- name: add rule to allow ping
+  copy:
+    content: |
+      -A INPUT -i {{ avahi_iface_name }} -p icmp -j ACCEPT
+    dest: "/etc/iptables/iptables.rules.d/10-ping.rules"
+  notify: restart iptables service
 - name: add commit rule
   copy:
     content: |
