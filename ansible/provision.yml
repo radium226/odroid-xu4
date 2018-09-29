@@ -26,3 +26,8 @@
       pulseaudio_sinks:
       - name: "alsa_output.usb-C-Media_Electronics_Inc._USB_Audio_Device-00.analog-stereo"
         description: "ODroid-XU4"
+  - role: "storage-server"
+    vars:
+      storage_server_iface_name: "{{ iface_name }}"
+    tags:
+    - data

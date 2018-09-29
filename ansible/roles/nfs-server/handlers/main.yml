@@ -1,0 +1,9 @@
+---
+- name: export NFS file systems
+  command: |
+    exportfs -ra
+  
+- name: restart iptables service
+  systemd:
+    name: "iptables.service"
+    state: restarted

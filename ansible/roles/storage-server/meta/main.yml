@@ -1,0 +1,5 @@
+---
+dependencies:
+- role: "nfs-server"
+  vars:
+    nfs_server_iface_name: "{{ storage_server_iface_name }}"
