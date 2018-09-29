@@ -7,6 +7,7 @@
   roles:
   - role: "bootstrap"
     vars:
+      bootstrap_flavour: "odroid-xu4"
       bootstrap_iface_name: "{{ iface_name }}"
       bootstrap_iface_mac_address: "{{ iface_mac_address }}"
     tags:
@@ -37,3 +38,7 @@
       storage_server_iface_name: "{{ iface_name }}"
     tags:
     - "data"
+
+  - role: "done-to-a-turn"
+    tags:
+    - "done-to-a-turn"

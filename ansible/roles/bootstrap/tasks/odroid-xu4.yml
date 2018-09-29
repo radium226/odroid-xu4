@@ -1,0 +1,21 @@
+---
+- name: setup network link
+  copy:
+    content: |
+      [Match]
+      MACAddress={{ bootstrap_iface_mac_address}}
+
+      [Link]
+      Name={{ bootstrap_iface_name }}
+    dest: "/etc/systemd/network/50-{{ bootstrap_iface_name }}.link"
+  notify: reload udev
+- name: setup network
+  copy:
+    content: |
+      [Match]
+      Name={{ bootstrap_iface_name }}
+
+      [Network]
+      DHCP=yes
+    dest: "/etc/systemd/network/{{ bootstrap_iface_name }}.network"
+  notify: restart systemd-networkd
