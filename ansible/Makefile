@@ -49,3 +49,41 @@ machinectl-stop:
 .PHONY: machinectl-shell
 machinectl-shell:
 	sudo machinectl shell "$(CONTAINER_NAME)"
+
+
+# Provisionning
+
+TARGET = remote
+HOST_NAME = odroid-xu4.local
+
+.PHONY: provision
+provision: provision-$(TARGET)
+
+.PHONY: provision-remote
+provision-remote: ssh-open-port
+	ansible-playbook \
+		--inventory-file "./inventory.ini" \
+		"./provision.yml" \
+		--connection "ssh" \
+		--extra-vars "ansible_ssh_user=root" \
+		--extra-vars "ansible_ssh_host=$(HOST_NAME)"
+
+
+# SSH
+
+COMMAND = bash -il
+
+.PHONY: ssh-command
+ssh-execute:
+	sshpass -p "root" ssh -tt -o "StrictHostKeyChecking=no" -o "GlobalKnownHostsFile=/dev/null" -o "UserKnownHostsFile=/dev/null" "root@$(HOST_NAME)" $(COMMAND) || true
+
+.PHONY: ssh-open-port
+ssh-open-port:
+	knock "$(HOST_NAME)" 3145:tcp 1414:tcp 2718:tcp
+
+.PHONY: ssh-close-port
+ssh-close-port:
+	knock "$(HOST_NAME)" 2718:tcp 1414:tcp 3145:tcp
+
+.PHONY: ssh
+ssh: ssh-open-port ssh-execute ssh-close-port

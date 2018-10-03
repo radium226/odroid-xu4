@@ -1,0 +1,7 @@
+- [ ] Setup dnsmasq in order to allow subdomain (like music.odroid-xu4.local, music.radium226.hd.free.fr, etc.)
+- [ ] Setup SSH security (with private keys, etc.)
+- [ ] Setup storage-server with udev triggers, etc.
+- [ ] Setup dispatcher in order to track what's happening (fail2ban, ssh, etc.)
+- [ ] Setup fail2ban
+- [ ] Setup mopidy
+- [ ] Set default sink for pulseaudio

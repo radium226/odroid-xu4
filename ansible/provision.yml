@@ -33,12 +33,26 @@
     tags:
     - "audio"
 
-  - role: "storage-server"
-    vars:
-      storage_server_iface_name: "{{ iface_name }}"
-    tags:
-    - "data"
+#  - role: "storage-server"
+#    vars:
+#      storage_server_iface_name: "{{ iface_name }}"
+#    tags:
+#    - "data"
 
   - role: "done-to-a-turn"
     tags:
     - "done-to-a-turn"
+
+
+- hosts: odroid-xu4
+  become: yes
+  tasks:
+  - name: add iptables rules for SSH
+    copy:
+      content: |
+        -A INPUT -i en01 -p tcp --dport 22 -j ACCEPT
+      dest: "/etc/iptables/iptables.rules.d/10-ssh.rules"
+  - name: restart iptables service
+    systemd:
+      name: "iptables.service"
+      state: restarted

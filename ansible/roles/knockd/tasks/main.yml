@@ -12,7 +12,7 @@
     content: |
       [Service]
       ExecStart=
-      ExecStart=/bin/sh -c 'find /etc/knockd.conf.d/ -maxdepth 1 -name "*.rules" -type "f" -print0 | sort -z | xargs -0 -I {} cat "{}" | /usr/bin/knockd --config "/dev/stdin"'
+      ExecStart=/bin/sh -c 'find /etc/knockd.conf.d/ -maxdepth 1 -name "*.conf" -type "f" -print0 | sort -z | xargs -0 -I {} cat "{}" | /usr/bin/knockd --config "/dev/stdin"'
     dest: "/etc/systemd/system/knockd.service.d/00-allow-rules-to-be-splitted.conf"
   notify:
   - reload systemd daemon
@@ -28,7 +28,7 @@
       [options]
         UseSyslog
         Interface = {{ knockd_iface_name }}
-    dest: "/etc/knockd.conf.d/00-options.rules"
+    dest: "/etc/knockd.conf.d/00-options.conf"
   notify: restart knockd service
 
 - name: start service
