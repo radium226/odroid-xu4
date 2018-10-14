@@ -1,9 +1,17 @@
----
-- name: install nginx packages
+- name: install packages
   yay:
     name: "nginx"
     state: present
-- name: configure nginx
+
+- name: create folders
+  file:
+    path="{{ item }}"
+    state=directory
+  loop:
+  - "/etc/nginx/sites.d"
+  - "/etc/nginx/upstreams.d"
+
+- name: configure
   copy:
     content: |
       worker_processes  1;
@@ -16,31 +24,23 @@
           default_type  application/octet-stream;
           sendfile        on;
           keepalive_timeout  65;
-          server {
-              listen       80 default_server;
-              server_name  _;
 
-              location / {
-                  root   "/opt/DtaT";
-                  autoindex on;
-                  auth_basic "Done to a Turn";
-                  auth_basic_user_file /etc/nginx/.htpasswd;
-              }
+          # Include upstreams
+          include /etc/nginx/upstreams.d/*.conf;
 
-              error_page   500 502 503 504  /50x.html;
-              location = /50x.html {
-                  autoindex on;
-              }
-          }
+          # Include sites
+          include /etc/nginx/sites.d/*.conf;
       }
     dest: "/etc/nginx/nginx.conf"
   notify: reload nginx service
+
 - name: add iptables rules
   copy:
     content: |
       -A INPUT -i en01 -p tcp --dport 80 -j ACCEPT
     dest: "/etc/iptables/iptables.rules.d/10-nginx.rules"
   notify: restart iptables service
+
 - name: start nginx service
   systemd:
     name: "nginx"

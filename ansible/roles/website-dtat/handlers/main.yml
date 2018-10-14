@@ -1,0 +1,9 @@
+---
+- name: reload nginx service
+  systemd:
+    name: "nginx"
+    state: reloaded
+- name: restart iptables service
+  systemd:
+    name: "iptables"
+    state: restarted

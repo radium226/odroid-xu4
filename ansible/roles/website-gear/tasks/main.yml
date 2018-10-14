@@ -1,0 +1,37 @@
+---
+- name: create folders
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+  - "/srv/http/gear"
+
+- name: copy files
+  copy:
+    src: "{{ item }}"
+    dest: "/srv/http/gear/"
+  loop:
+  - "index.html"
+
+- name: add nginx site
+  copy:
+    content: |
+      server {
+        listen 80;
+        server_name rouages.xyz;
+
+        root /srv/http/gear;
+
+        location / {
+          try_files "/index.html" =500;
+        }
+      }
+
+      server {
+          listen  80 default_server;
+          server_name  _;
+
+          return 301 http://rouages.xyz$request_uri;
+      }
+    dest: "/etc/nginx/sites.d/99-gear.conf"
+  notify: reload nginx service
