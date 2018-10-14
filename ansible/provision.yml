@@ -39,9 +39,8 @@
 #    tags:
 #    - "data"
 
-  - role: "done-to-a-turn"
-    tags:
-    - "done-to-a-turn"
+  - role: website-gear
+  - role: website-dtat
 
 
 - hosts: odroid-xu4
