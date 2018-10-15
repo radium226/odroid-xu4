@@ -1,4 +1,7 @@
 /whistleblower.toml
+/src
+/pkg
+/whistleblower-*.tar.gz
 
 /.venv
 

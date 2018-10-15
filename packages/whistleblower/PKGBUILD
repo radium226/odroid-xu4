@@ -1,0 +1,30 @@
+pkgname="${PKGNAME}"
+pkgver="${PKGVER}"
+pkgrel="${PKGREL}"
+arch=('any')
+
+prepare()
+{
+  :
+}
+
+depends=(
+  "python-toml"
+  "python-deepmerge"
+  "python-gobject"
+  "python-dbus"
+)
+
+source=(
+  "${pkgname}-${pkgver}.tar.gz"
+)
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  python ./setup.py build
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  python setup.py install --root="${pkgdir}/" --optimize=1 --skip-build
+}
