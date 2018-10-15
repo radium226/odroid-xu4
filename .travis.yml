@@ -16,4 +16,4 @@ arch:
   script:
   - yay -Sy && make -f 'Makefile.ci' package && make -f 'Makefile.github' gh-pages GITHUB_TOKEN="${GITHUB_TOKEN}"
 script:
-- curl -s https://raw.githubusercontent.com/mikkeloscar/arch-travis/master/arch-travis.sh | bash
+- curl -s https://raw.githubusercontent.com/mikkeloscar/arch-travis/d4f0136300faae15d1db4efbc15bf9bd62d920b3/arch-travis.sh | bash
