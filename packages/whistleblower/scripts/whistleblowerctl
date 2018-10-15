@@ -1,0 +1,24 @@
+#!/usr/bin/env python
+
+import argparse
+
+from whistleblower.client import Client
+
+parser = argparse.ArgumentParser()
+
+subparsers = parser.add_subparsers(dest="action")
+
+send_message_parser = subparsers.add_parser("send-message")
+send_message_parser.add_argument("--text")
+def send_message(client, args):
+    return client.send_message(args.text)
+
+actions = {
+    "send-message": send_message
+}
+
+def client(args):
+    return Client()
+
+args = parser.parse_args()
+actions[args.action](client(args), args)
