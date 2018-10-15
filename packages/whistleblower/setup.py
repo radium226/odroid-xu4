@@ -30,6 +30,7 @@ setup(
     packages=[
         "whistleblower.server",
         "whistleblower.client",
-        "whistleblower.dbus"
+        "whistleblower.dbus",
+        "whistleblower.context"
     ]
 )

@@ -17,6 +17,13 @@ install-requirements:
 .PHONY: clean
 clean:
 	rm -Rf "./.venv" || true
+	python "./setup.py" clean
+	rm -Rf "./dist" || true
+	rm -Rf "./$(NAME)-$(VERSION).tar.gz" || true
+	rm -Rf "./pkg" || true
+	find . -name "*.pkg.tar.xz" | xargs -I {} rm "{}" || true
+	rm -Rf "./src" || true
+	rm -Rf "whistleblower.egg-info" || true
 
 .PHONY: develop
 develop: ./.venv
