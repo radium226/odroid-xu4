@@ -56,6 +56,7 @@ machinectl-shell:
 TARGET = remote
 HOST_NAME = odroid-xu4.local
 PLAYBOOK_FILE_NAME = provision.yml
+TAGS = all
 
 .PHONY: provision
 provision: provision-$(TARGET)
@@ -67,7 +68,8 @@ provision-remote: ssh-open-port
 		"./$(PLAYBOOK_FILE_NAME)" \
 		--connection "ssh" \
 		--extra-vars "ansible_ssh_user=root" \
-		--extra-vars "ansible_ssh_host=$(HOST_NAME)"
+		--extra-vars "ansible_ssh_host=$(HOST_NAME)" \
+		--tags "$(TAGS)"
 
 
 # SSH

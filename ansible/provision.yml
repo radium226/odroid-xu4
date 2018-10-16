@@ -33,11 +33,11 @@
     tags:
     - "audio"
 
-#  - role: "storage-server"
-#    vars:
-#      storage_server_iface_name: "{{ iface_name }}"
-#    tags:
-#    - "data"
+  - role: "storage-server"
+    vars:
+      storage_server_iface_name: "{{ iface_name }}"
+    tags:
+    - "data"
 
   - role: website-gear
   - role: website-dtat

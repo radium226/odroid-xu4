@@ -1,2 +1,5 @@
 ---
-nfs_server_port: 2049
+nfs_server_ports:
+- 111
+- 2049
+- 20048

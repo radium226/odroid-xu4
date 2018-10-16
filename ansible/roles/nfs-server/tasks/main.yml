@@ -13,6 +13,8 @@
 - name: add iptables rules
   copy:
     content: |
+      {% for nfs_server_port in nfs_server_ports %}
       -A INPUT -i {{ nfs_server_iface_name }} -p tcp -m tcp --dport {{ nfs_server_port }} -j ACCEPT
+      {% endfor %}
     dest: "/etc/iptables/iptables.rules.d/10-nfs.rules"
   notify: restart iptables service
