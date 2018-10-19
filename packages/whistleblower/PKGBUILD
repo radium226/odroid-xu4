@@ -27,4 +27,17 @@ build() {
 package() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   python setup.py install --root="${pkgdir}/" --optimize=1 --skip-build
+
+  install -Dm0644 \
+    "${startdir}/usr_lib_systemd_system_whistleblower.service" \
+    "${pkgdir}/usr/lib/systemd/system/whistleblower.service"
+
+  install -Dm0644 \
+    "${startdir}/usr_share_dbus-1_system-services_com.github.radium226.Whistleblower.service" \
+    "${pkgdir}/usr/share/dbus-1/system-services/com.github.radium226.Whistleblower.service"
+
+  install -Dm0644 \
+    "${startdir}/etc_dbus-1_system.d_com.github.radium226.Whistleblower.conf" \
+    "${pkgdir}/etc/dbus-1/system.d/com.github.radium226.Whistleblower.conf"
+
 }

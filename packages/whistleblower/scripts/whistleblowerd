@@ -4,15 +4,14 @@ from whistleblower.server import Server
 from whistleblower.dbus import Interface
 from whistleblower.context import Context
 
-from pydbus import SessionBus
+from pydbus import SystemBus
 from pydbus.generic import signal
 
 from gi.repository import GLib
 
 
-
 context = Context()
-bus = SessionBus()
+bus = SystemBus()
 server = Server(context)
 interface = Interface(server)
 

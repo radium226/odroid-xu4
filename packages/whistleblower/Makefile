@@ -48,7 +48,7 @@ debug:
 ./$(NAME)-$(VERSION).tar.gz: ./dist/$(NAME)-$(VERSION).tar.gz
 	cp "./dist/$(NAME)-$(VERSION).tar.gz" "./$(NAME)-$(VERSION).tar.gz"
 
-package: $(NAME)-$(VERSION).tar.gz
+$(NAME)-$(VERSION)-$(RELEASE)-any.pkg.tar.xz: $(NAME)-$(VERSION).tar.gz
 	PKGNAME="$(NAME)" \
 	PKGVER="$(VERSION)" \
 	PKGREL="$(RELEASE)" \
@@ -59,3 +59,9 @@ package: $(NAME)-$(VERSION).tar.gz
 	if [[ "$(ARCHIVE_FOLDER_PATH)" != "." ]]; then \
 		find . -name "*.pkg.tar.xz" | xargs -I {} cp "{}" "$(ARCHIVE_FOLDER_PATH)" ; \
 	fi
+
+.PHONY: package
+package: $(NAME)-$(VERSION)-$(RELEASE)-any.pkg.tar.xz
+
+install: package
+	sudo pacman -U "$(NAME)-$(VERSION)-$(RELEASE)-any.pkg.tar.xz" --noconfirm

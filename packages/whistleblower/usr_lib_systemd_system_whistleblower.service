@@ -1,0 +1,8 @@
+[Unit]
+Description=Whistleblower
+
+[Service]
+Type=dbus
+User=root
+ExecStart=/usr/bin/whistleblowerd
+BusName=com.github.radium226.Whistleblower
