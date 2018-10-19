@@ -12,7 +12,8 @@ depends=(
   "python-toml"
   "python-deepmerge"
   "python-gobject"
-  "python-dbus"
+  "python-pydbus"
+  "python-telegram-bot"
 )
 
 source=(

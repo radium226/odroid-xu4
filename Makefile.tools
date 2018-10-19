@@ -14,4 +14,4 @@ ssh:
 PORT = 80
 .PHONY: nmap
 nmap:
-	sudo nmap -sS -O -p"$(PORT)" "$(HOST_NAME)"
+	sudo nmap -sS -Pn -O -p"$(PORT)" "$(HOST_NAME)"

@@ -9,6 +9,7 @@ package: $(ARCHIVE_FOLDER_PATH)
 	find . -maxdepth 1 -mindepth 1 -type "d"  | while read package_folder_path; do \
 		if [[ -f "$${package_folder_path}/PKGBUILD" ]]; then \
 			cd "$${package_folder_path}" ; \
+			pwd ; \
 			make package ARCHIVE_FOLDER_PATH="$(ARCHIVE_FOLDER_PATH)" ; \
 			cd - ; \
 		fi ; \
@@ -17,3 +18,12 @@ package: $(ARCHIVE_FOLDER_PATH)
 .PHONY: clean
 clean:
 	rm -Rf "$(ARCHIVE_FOLDER_PATH)" || true
+	declare package_folder_path= ; \
+	find . -maxdepth 1 -mindepth 1 -type "d"  | while read package_folder_path; do \
+		if [[ -f "$${package_folder_path}/PKGBUILD" ]]; then \
+			cd "$${package_folder_path}" ; \
+			pwd ; \
+			make clean ; \
+			cd - ; \
+		fi ; \
+	done

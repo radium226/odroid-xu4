@@ -1,0 +1,18 @@
+---
+- name: install packages
+  yay:
+    name: "{{ item }}"
+    state: present
+  loop:
+  - "python-pydbus"
+  - "python-telegram-bot"
+  - "whistleblower"
+  become: no
+
+- name: configure
+  copy:
+    content: |
+      [telegram]
+      token="{{ whistleblower_token }}"
+      chat_id="{{ whistleblower_chat_id }}"
+    dest: "/etc/whistleblower.toml"

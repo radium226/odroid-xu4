@@ -1,2 +1,4 @@
 *.retry
 /.odroid-xu4
+/.vault-password
+/*.log

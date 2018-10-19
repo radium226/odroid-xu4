@@ -14,6 +14,6 @@ arch:
   - bc
   - python-pypi2pkgbuild
   script:
-  - yay -Sy && make -f 'Makefile.ci' package && make -f 'Makefile.github' gh-pages GITHUB_TOKEN="${GITHUB_TOKEN}"
+  - yay -Sy && make -f 'Makefile.ci' clean package && make -f 'Makefile.github' clean gh-pages GITHUB_TOKEN="${GITHUB_TOKEN}"
 script:
 - curl -s https://raw.githubusercontent.com/mikkeloscar/arch-travis/d4f0136300faae15d1db4efbc15bf9bd62d920b3/arch-travis.sh | bash

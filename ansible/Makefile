@@ -67,9 +67,10 @@ provision-remote: ssh-open-port
 		--inventory-file "./inventory.ini" \
 		"./$(PLAYBOOK_FILE_NAME)" \
 		--connection "ssh" \
-		--extra-vars "ansible_ssh_user=root" \
+		--extra-vars "ansible_ssh_user=ansible" \
 		--extra-vars "ansible_ssh_host=$(HOST_NAME)" \
-		--tags "$(TAGS)"
+		--tags "$(TAGS)" \
+		--vault-password-file="./.vault-password"
 
 
 # SSH
@@ -78,7 +79,7 @@ COMMAND = bash -il
 
 .PHONY: ssh-command
 ssh-execute:
-	sshpass -p "root" ssh -tt -o "StrictHostKeyChecking=no" -o "GlobalKnownHostsFile=/dev/null" -o "UserKnownHostsFile=/dev/null" "root@$(HOST_NAME)" $(COMMAND) || true
+	ssh -tt -o "StrictHostKeyChecking=no" -o "GlobalKnownHostsFile=/dev/null" -o "UserKnownHostsFile=/dev/null" "root@$(HOST_NAME)" $(COMMAND) || true
 
 .PHONY: ssh-open-port
 ssh-open-port:
@@ -90,3 +91,7 @@ ssh-close-port:
 
 .PHONY: ssh
 ssh: ssh-open-port ssh-execute ssh-close-port
+
+.PHONY: encrypt-string
+encrypt-string:
+	ansible-vault encrypt_string --vault-password-file="./.vault-password" "$(STRING)"

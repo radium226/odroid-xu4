@@ -56,12 +56,12 @@ $(NAME)-$(VERSION)-$(RELEASE)-any.pkg.tar.xz: $(NAME)-$(VERSION).tar.gz
 			--force \
 			--skipchecksums \
 			--nodeps
-	if [[ "$(ARCHIVE_FOLDER_PATH)" != "." ]]; then \
-		find . -name "*.pkg.tar.xz" | xargs -I {} cp "{}" "$(ARCHIVE_FOLDER_PATH)" ; \
-	fi
 
 .PHONY: package
 package: $(NAME)-$(VERSION)-$(RELEASE)-any.pkg.tar.xz
+	if [[ "$(ARCHIVE_FOLDER_PATH)" != "." ]]; then \
+		find . -name "*.pkg.tar.xz" | xargs -I {} cp "{}" "$(ARCHIVE_FOLDER_PATH)" ; \
+	fi
 
 install: package
 	sudo pacman -U "$(NAME)-$(VERSION)-$(RELEASE)-any.pkg.tar.xz" --noconfirm

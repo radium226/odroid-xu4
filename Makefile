@@ -86,3 +86,8 @@ COMMAND = bash -il
 .PHONY: tools-ssh
 tools-ssh:
 	make -f "./Makefile.tools" ssh COMMAND="$(COMMAND)"
+
+GITHUB_TOKEN = ""
+.PHONY: travis
+travis:
+	yay -Sy && make -f 'Makefile.ci' package && make -f 'Makefile.github' gh-pages GITHUB_TOKEN="$(GITHUB_TOKEN)"

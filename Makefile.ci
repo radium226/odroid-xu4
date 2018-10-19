@@ -4,6 +4,7 @@ package:
 	find . -maxdepth 1 -mindepth 1 -type "d"  | while read project_folder_path; do \
 		if [[ -f "$${project_folder_path}/Makefile.ci" ]]; then \
 			cd "$${project_folder_path}" ; \
+			pwd ; \
 			make -f "Makefile.ci" package ; \
 			cd - ; \
 		fi ; \
