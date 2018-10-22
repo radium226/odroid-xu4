@@ -1,0 +1,9 @@
+---
+- name: configure knockd
+  include_role:
+    name: "knockd-iptables-config"
+  vars:
+    knockd_iptables_config_name: "ssh"
+    knockd_iptables_config_sequence: "3145:tcp,1414:tcp,2718:tcp"
+    knockd_iptables_config_port: "{{ ssh_server_port }}"
+    knockd_iptables_config_iface_name: "{{ ssh_server_iface_name }}"

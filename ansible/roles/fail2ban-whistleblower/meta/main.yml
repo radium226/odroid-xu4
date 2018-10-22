@@ -1,0 +1,4 @@
+---
+dependencies:
+- role: "fail2ban"
+- role: "whistleblower"

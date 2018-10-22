@@ -9,3 +9,6 @@ dependencies:
 - role: "avahi"
   vars:
     avahi_iface_name: "{{ common_iface_name }}"
+- role: "fail2ban"
+- role: "whistleblower"
+- role: "ssh-server"

@@ -1,0 +1,7 @@
+---
+- name: copy config file
+  template:
+    src: "etc_knockd.conf.d_10-name.conf.j2"
+    dest: "/etc/knockd.conf.d/10-{{ knockd_iptables_config_name }}.conf"
+  notify:
+  - restart knockd service

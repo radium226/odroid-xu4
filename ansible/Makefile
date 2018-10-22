@@ -1,6 +1,6 @@
 CONTAINER_NAME = odroid-xu4
 
-PLAYBOOK_FILE_NAME = provision.yml
+PLAYBOOK = provision.yml
 
 ./.$(CONTAINER_NAME):
 	mkdir -p "./.$(CONTAINER_NAME)"
@@ -35,7 +35,7 @@ ansible-playbook: systemd-nspawn ./library/yay
 	sudo ansible-playbook \
 		--inventory="./inventory.ini" \
 		--connection="systemd-nspawn" \
-		"./$(PLAYBOOK_FILE_NAME)"
+		"./$(PLAYBOOK)"
 
 .PHONY: clean
 clean:
@@ -55,7 +55,7 @@ machinectl-shell:
 
 TARGET = remote
 HOST_NAME = odroid-xu4.local
-PLAYBOOK_FILE_NAME = provision.yml
+PLAYBOOK = provision.yml
 TAGS = all
 
 .PHONY: provision
@@ -65,7 +65,7 @@ provision: provision-$(TARGET)
 provision-remote: ssh-open-port
 	ansible-playbook \
 		--inventory-file "./inventory.ini" \
-		"./$(PLAYBOOK_FILE_NAME)" \
+		"./$(PLAYBOOK)" \
 		--connection "ssh" \
 		--extra-vars "ansible_ssh_user=ansible" \
 		--extra-vars "ansible_ssh_host=$(HOST_NAME)" \
@@ -84,9 +84,11 @@ ssh-execute:
 .PHONY: ssh-open-port
 ssh-open-port:
 	knock "$(HOST_NAME)" 3145:tcp 1414:tcp 2718:tcp
+	@sleep 2.5
 
 .PHONY: ssh-close-port
 ssh-close-port:
+	@sleep 2.5
 	knock "$(HOST_NAME)" 2718:tcp 1414:tcp 3145:tcp
 
 .PHONY: ssh
@@ -95,3 +97,7 @@ ssh: ssh-open-port ssh-execute ssh-close-port
 .PHONY: encrypt-string
 encrypt-string:
 	ansible-vault encrypt_string --vault-password-file="./.vault-password" "$(STRING)"
+
+.PHONY: reboot
+reboot:
+	make ssh COMMAND='reboot'

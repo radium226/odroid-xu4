@@ -1,0 +1,17 @@
+---
+- name: add jail file for fail2ban
+  copy:
+    content: |
+      [sshd]
+      enabled  = true
+      filter   = sshd
+      action = whistleblower
+               iptables[port={{ ssh_server_port }}]
+      backend  = systemd
+      findtime = 1m
+      bantime  = 1m
+      maxretry = 5
+      ignoreip = 127.0.0.1/8
+    dest: "/etc/fail2ban/jail.d/sshd.local"
+  notify:
+  - restart fail2ban service

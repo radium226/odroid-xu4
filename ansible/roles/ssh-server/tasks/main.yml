@@ -1,0 +1,29 @@
+---
+- name: delete iptables config file
+  file:
+    path: "/etc/iptables/iptables.rules.d/10-ssh.rules"
+    state: absent
+
+- name: copy script file for whistleblower
+  copy:
+    content: |
+      #!/bin/sh
+
+      # See: http://sandrinodimattia.net/posting-successful-ssh-logins-to-slack/
+
+      if [ "$PAM_TYPE" != "close_session" ]; then
+        whistleblowerctl send-message --text="L'utilistateur ${PAM_USER} vient de se connecter en SSH. "
+      fi
+    dest: "/etc/ssh/pam-whistleblower.sh"
+    mode: a+x
+
+- name: add script for whistleblower in pam config
+  blockinfile:
+    block: |
+      auth optional pam_exec.so seteuid /etc/ssh/pam-whistleblower.sh
+      session optional pam_exec.so seteuid /etc/ssh/pam-whistleblower.sh
+    state: present
+    path: "/etc/pam.d/sshd"
+
+- include: "knockd.yml"
+- include: "fail2ban.yml"

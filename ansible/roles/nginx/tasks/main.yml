@@ -25,6 +25,8 @@
           sendfile        on;
           keepalive_timeout  65;
 
+          limit_req_zone $binary_remote_addr zone=global:10m rate=5r/s;
+
           # Include upstreams
           include /etc/nginx/upstreams.d/*.conf;
 
@@ -37,7 +39,7 @@
 - name: add iptables rules
   copy:
     content: |
-      -A INPUT -i en01 -p tcp --dport 80 -j ACCEPT
+      -A INPUT -i en01 -p tcp --dport {{ nginx_http_port }} -j ACCEPT
     dest: "/etc/iptables/iptables.rules.d/10-nginx.rules"
   notify: restart iptables service
 
@@ -46,3 +48,5 @@
     name: "nginx"
     state: started
     enabled: yes
+
+- include: "fail2ban.yml"

@@ -1,0 +1,7 @@
+[{{ knockd_iptables_config_name }}]
+  sequence      = {{ knockd_iptables_config_sequence }}
+  seq_timeout   = {{ knockd_iptables_config_sequence_timeout }}
+  tcpflags      = syn
+  start_command = iptables -I INPUT -i {{ knockd_iptables_config_iface_name }} -s %IP% -p tcp --dport {{ knockd_iptables_config_port }} -j ACCEPT && whistleblowerctl send-message --text="Le port {{ knockd_iptables_config_port }} a été ouvert avec succès pour %IP%. " || whistleblowerctl send-message --text="Impossible d'ouvrir le port {{ knockd_iptables_config_port }} pour l'IP %IP%. "
+  cmd_timeout   = {{ knockd_iptables_config_command_timeout }}
+  stop_command  = iptables -D INPUT -i {{ knockd_iptables_config_iface_name }} -s %IP% -p tcp --dport {{ knockd_iptables_config_port }} -j ACCEPT && whistleblowerctl send-message --text="Le port {{ knockd_iptables_config_port }} a été fermé avec succès pour l'IP %IP%. " || whistleblowerctl send-message --text="Impossible de fermer le port {{ knockd_iptables_config_port }} pour l'IP %IP%. "

@@ -1,0 +1,2 @@
+knockd_iptables_config_command_timeout: 10
+knockd_iptables_config_sequence_timeout: 60

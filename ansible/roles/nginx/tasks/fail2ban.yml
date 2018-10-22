@@ -1,0 +1,28 @@
+---
+- name: copy filter for fail2ban
+  copy:
+    content: |
+      [Definition]
+      failregex = limiting requests, excess: [\d\.]+ by zone ".*", client: <HOST>,
+      datepattern = {^LN-BEG}
+      journalmatch = _SYSTEMD_UNIT=nginx.service + _COMM=nginx
+    dest: "/etc/fail2ban/filter.d/nginx-limit-req.conf"
+  notify:
+  - restart fail2ban service
+
+- name: copy jail for fail2ban
+  copy:
+    content: |
+      [nginx-limit-req]
+      enabled = true
+      filter = nginx-limit-req
+      action = whistleblower
+               iptables[port={{ nginx_http_port }}]
+      backend = systemd
+      findtime = 1m
+      bantime  = 1m
+      maxretry = 1
+      ignoreip = 127.0.0.1/8
+    dest: "/etc/fail2ban/jail.d/nginx-limit-req.local"
+  notify:
+  - restart fail2ban service

@@ -1,0 +1,9 @@
+- name: install packages
+  yay:
+   name: "fail2ban"
+   state: present
+
+- name: start service
+  systemd:
+    name: "fail2ban"
+    state: started

@@ -1,0 +1,10 @@
+---
+- name: copy action file
+  copy:
+    content: |
+      [Definition]
+      actionban = whistleblowerctl send-message --text="L'IP <ip> a été bannie à cause de <name>. "
+      actionunban = whistleblowerctl send-message --text="L'IP <ip> a été graciée. "
+    dest: "/etc/fail2ban/action.d/whistleblower.conf"
+  notify:
+  - restart fail2ban service

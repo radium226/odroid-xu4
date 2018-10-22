@@ -18,6 +18,10 @@
   - reload systemd daemon
   - restart knockd service
 
+- name: remove default config
+  file:
+    path: "/etc/knockd.conf"
+    state: absent
 - name: create folder for config
   file:
     path: "/etc/knockd.conf.d"

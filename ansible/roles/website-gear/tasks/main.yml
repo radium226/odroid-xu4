@@ -20,6 +20,8 @@
         listen 80;
         server_name rouages.xyz;
 
+        limit_req zone=global burst=5 nodelay;
+
         root /srv/http/gear;
 
         location / {
