@@ -54,7 +54,7 @@ machinectl-shell:
 # Provisionning
 
 TARGET = remote
-HOST_NAME = odroid-xu4.local
+HOST = odroid-xu4.local
 PLAYBOOK = provision.yml
 TAGS = all
 
@@ -68,7 +68,7 @@ provision-remote: ssh-open-port
 		"./$(PLAYBOOK)" \
 		--connection "ssh" \
 		--extra-vars "ansible_ssh_user=ansible" \
-		--extra-vars "ansible_ssh_host=$(HOST_NAME)" \
+		--extra-vars "ansible_ssh_host=$(HOST)" \
 		--tags "$(TAGS)" \
 		--vault-password-file="./.vault-password"
 
@@ -79,17 +79,17 @@ COMMAND = bash -il
 
 .PHONY: ssh-command
 ssh-execute:
-	ssh -tt -o "StrictHostKeyChecking=no" -o "GlobalKnownHostsFile=/dev/null" -o "UserKnownHostsFile=/dev/null" "root@$(HOST_NAME)" $(COMMAND) || true
+	ssh -tt -o "StrictHostKeyChecking=no" -o "GlobalKnownHostsFile=/dev/null" -o "UserKnownHostsFile=/dev/null" "root@$(HOST)" $(COMMAND) || true
 
 .PHONY: ssh-open-port
 ssh-open-port:
-	knock "$(HOST_NAME)" 3145:tcp 1414:tcp 2718:tcp
+	knock "$(HOST)" 3145:tcp 1414:tcp 2718:tcp
 	@sleep 2.5
 
 .PHONY: ssh-close-port
 ssh-close-port:
 	@sleep 2.5
-	knock "$(HOST_NAME)" 2718:tcp 1414:tcp 3145:tcp
+	knock "$(HOST)" 2718:tcp 1414:tcp 3145:tcp
 
 .PHONY: ssh
 ssh: ssh-open-port ssh-execute ssh-close-port

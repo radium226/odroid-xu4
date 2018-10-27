@@ -8,7 +8,7 @@
       action = whistleblower
                iptables[port={{ ssh_server_port }}]
       backend  = systemd
-      findtime = 1m
+      findtime = 10m
       bantime  = 1m
       maxretry = 5
       ignoreip = 127.0.0.1/8

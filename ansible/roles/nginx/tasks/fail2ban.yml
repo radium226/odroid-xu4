@@ -19,9 +19,9 @@
       action = whistleblower
                iptables[port={{ nginx_http_port }}]
       backend = systemd
-      findtime = 1m
+      findtime = 10m
       bantime  = 1m
-      maxretry = 1
+      maxretry = 5
       ignoreip = 127.0.0.1/8
     dest: "/etc/fail2ban/jail.d/nginx-limit-req.local"
   notify:
