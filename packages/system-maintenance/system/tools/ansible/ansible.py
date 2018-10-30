@@ -6,7 +6,7 @@ class Ansible:
 
     def __init__(self, inventory_file_path, vault_password_file_path = None):
         self.inventory_file_path = inventory_file_path
-        self.password_file_path = password_file_path
+        self.vault_password_file_path = vault_password_file_path
 
     def run_playbook(self, playbook_file_path, limit=[], local=False):
         inventory_args = [f"--inventory-file={str(self.inventory_file_path)}"]
