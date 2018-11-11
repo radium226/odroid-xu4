@@ -42,6 +42,8 @@
         profile: "output:analog-stereo"
       - name: "alsa_card.platform-sound"
         profile: "off"
+      - name: "alsa_card.usb-046d_HD_Webcam_C525_12B042F0-00"
+        profile: "off"
       pulseaudio_sinks:
       - name: "alsa_output.usb-C-Media_Electronics_Inc._USB_Audio_Device-00.analog-stereo"
         description: "ODroid-XU4"
