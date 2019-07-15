@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from subprocess import Popen
+from whistleblower.client import Client
 
 class Ansible:
 
@@ -17,4 +18,7 @@ class Ansible:
         command = ["ansible-playbook"] + inventory_args + playbook_args + connection_args + vault_password_args + limit_args
         #print(f"command={command}")
         process = Popen(command)
-        process.wait()
+        return_code = process.wait()
+
+        client = Client()
+        client.send_message(f"ansible-playbook has run and returned {return_code}")

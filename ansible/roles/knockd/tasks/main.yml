@@ -5,7 +5,7 @@
 
 - name: create folder for systemd service drop-ins
   file:
-    path: "/etc/systemd/systemd/knockd.service.d"
+    path: "/etc/systemd/system/knockd.service.d"
     state: directory
 - name: add systemd service drop-in to allow rules to be splitted
   copy:

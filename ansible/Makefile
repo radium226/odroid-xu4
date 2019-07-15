@@ -94,6 +94,20 @@ ssh-close-port:
 .PHONY: ssh
 ssh: ssh-open-port ssh-execute ssh-close-port
 
+.PHONY: copy-from
+copy-from: ssh-open-port scp-copy-from ssh-close-port
+
+.PHONY: copy-to
+copy-to: ssh-open-port scp-copy-to ssh-close-port
+
+.PHONY: scp-copy-to
+scp-copy-to:
+	scp -o "StrictHostKeyChecking=no" -o "GlobalKnownHostsFile=/dev/null" -o "UserKnownHostsFile=/dev/null" "$(SOURCE)" "root@$(HOST):$(DEST)"
+
+.PHONY: scp-copy-from
+scp-copy-from:
+	scp -o "StrictHostKeyChecking=no" -o "GlobalKnownHostsFile=/dev/null" -o "UserKnownHostsFile=/dev/null" "root@$(HOST):$(SOURCE)" "$(DEST)"
+
 .PHONY: encrypt-string
 encrypt-string:
 	ansible-vault encrypt_string --vault-password-file="./.vault-password" "$(STRING)"
